@@ -1,0 +1,71 @@
+%% First of all, include a document class and options
+\documentclass[english,master]{diploma}
+
+%% Includes
+\usepackage[autostyle=true]{csquotes} % enhanced support for quotation marks, support for biblatex package
+\usepackage[backend=biber, style=iso-numeric, alldates=iso]{biblatex} % bibliography
+\DeclareNameAlias{default}{family-given} % Name format 'last-first' deprecated. Use 'family-given'
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{xfrac}
+\usepackage{caption}
+\usepackage{subcaption}
+\newcommand*\Laplace{\mathop{}\!\mathbin\bigtriangleup}
+\newcommand{\figref}[1]{\figurename~\ref{#1}}
+\newcommand{\tabref}[1]{\tablename~\ref{#1}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+%% Next, enter data for leading pages
+\ThesisAuthor{Bc. Vojtěch Dorňák}
+
+\ThesisSupervisor{Ing. Lukáš Pospíšil, Ph.D.}
+
+\CzechThesisTitle{Algoritmy pro klasifikaci visuálních signálů s využitím technik extrakce významných rysů}
+
+\EnglishThesisTitle{Algorithms used for classifying visual signals using methods for extracting significant features}
+
+\SubmissionYear{2021}
+
+\Acknowledgement{I would like to thank all those who helped me with the work,
+because without them this work would not have happened.}
+
+\CzechAbstract{Tohle je český abstrakt}
+
+\CzechKeywords{typografie, \LaTeX, diplomová práce}
+
+\EnglishAbstract{This is English abstract.}
+
+\EnglishKeywords{typography, \LaTeX, master thesis}
+
+\AddAcronym{SIFT}{Scale Invariant Feature Transform}
+\AddAcronym{SURF}{Speed Up Robust Features}
+\AddAcronym{ORB}{Oriented Fast and Rotated Brief}
+\AddAcronym{SVM}{Support Vector Machine}
+
+% Bibliography resources for BibLaTeX
+\addbibresource{main.bib}
+
+%% Beginning of the document
+\begin{document}
+
+%% Leading pages printing
+\MakeTitlePages
+
+\include{content/introduction/introduction}
+
+\include{content/extract/extract}
+
+\include{content/classifiers/classifiers}
+
+\include{content/data/data}
+
+\include{content/results/results}
+
+\include{content/conclusion/conclusion}
+
+\printbibliography[heading=bibintoc]
+
+\end{document}
