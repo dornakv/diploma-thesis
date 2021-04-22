@@ -1,4 +1,4 @@
-\section{Bayes Classifier}
+\section{Bayesian Model}
 This classifier is suitable for classifying data, represented by a stochastic vector. The BoVW data can be easily transformed into such vector. Instead of each component of the BoVW vector representing the amount of keypoints in respective category, the component in our new vector represents the probabilty of keypoints belonging in respective category.
 
 Let us denote the stochastic data vector $\Pi_{xt} \in \mathbb{R}^{K_x}, t=1,\dots,T$, where $T$ is the amount of samples. Let the vector $\Pi{yt}\in \mathbb{R}^{K_y}$ be vector of probabilities, with which $\Pi{xt}$ belongs to each category, and $K_y$ the amount of categories.
@@ -27,7 +27,7 @@ For the purpose of optimization, the term $\ln \Pi_{yt}^i$ is constant, therefor
 \begin{equation}
     \text{dist}(\Pi_{yt}, \Delta\Pi_{xt}) \propto - \sum_{i=1}^{K_y} \Pi_{yt}^i \ln (\Delta\Pi_{xt})_i.
 \end{equation}
-This problem is hard to minimize analytically, therefore, Jensen's inequality is used:
+This problem is hard to minimize analytically. However, $\Delta\Pi_{xt}$ is a convex function, and therefore $-\ln(\Delta\Pi_{xt})$ is a convex function. Thus Jensen's inequality can be used:
 \begin{equation}
     - \sum_{i=1}^{K_y} \Pi_{yt}^i \ln (\Delta\Pi_{xt})_i \leq - \sum_{i=1}^{K_y} \Pi_{yt}^i ( \sum_{j=1}^{K_x} \Pi_{xt}^j \ln (\Delta_{ij}) ) = - \sum_{i=1}^{K_y} \sum_{j=1}^{K_x} \Pi_{yt}^i \Pi_{xt}^j \ln \Delta_{ij}.
 \end{equation}
@@ -39,10 +39,34 @@ where
 \begin{equation}
     \Omega_{Delta} = \{ \Delta \in [0, 1], \forall j \in \{ 1, 2, \dots, K_x \} : \sum_{i=1}^{K_y} \Delta_{ij} = 1 \},
 \end{equation}
-which can be solved analytically:
+which can be solved analytically.
+
+Let $\Delta$ be the optimal stochastic matrix. There exist $\lambda_j \in \mathbb{R}^{K_x}$ such that
 \begin{equation}
     L(\Delta, \lambda) = - \sum_{t=1}^T \sum_{i=1}^{K_y} \sum_{j=1}^{K_x} \Pi_{yt}^i \Pi_{xt}^j \ln \Delta_{ij} + \sum_{j=1}^{K_x} \lambda_j (\sum_{i=1}^{K_y} \Delta_{ij} - 1)
 \end{equation}
+is the Lagrange function. We can find the optimal $\Delta^*$:
 \begin{equation}
-    \nabla_{\Delta_{\hat{i}\hat{j}}} L(\Delta_{\hat{i}\hat{j}}, \lambda) = - \frac{1}{\Delta_{\hat{i}\hat{j}}} \sum_{t=1}^{T} \Pi_{yt}^{\hat{i}} \Pi_{xt}^{\hat{j}} + \lambda_{\hat{j}} = 0
+    \nabla_{\Delta_{\hat{i}\hat{j}}} L(\Delta_{\hat{i}\hat{j}}, \lambda) = - \frac{1}{\Delta_{\hat{i}\hat{j}}} \sum_{t=1}^{T} \Pi_{yt}^{\hat{i}} \Pi_{xt}^{\hat{j}} + \lambda_{\hat{j}} = 0,
 \end{equation}
+\begin{equation}
+    \nabla_{\Delta_{\hat{j}}} = \sum_{i=1}^{K_y} \Delta_{i\hat{j}} - 1 = 0,
+\end{equation}
+\begin{equation}
+    \Delta_{\hat{i}\hat{j}} = \frac{\sum_{t=1}^{T} \Pi_{yt}^{\hat{i}} \Pi_{xt}^{\hat{j}}}{\lambda{\hat{j}}},
+\end{equation}
+\begin{equation}
+    \lambda_{\hat{j}} = \sum_{i=1}^{K_y} \sum_{t=1}^{T} \Pi_{yt}^{i} \Pi_{xt}^{\hat{j}},
+\end{equation}
+\begin{equation}
+    \Delta_{\hat{i}\hat{j}}^{*} = \frac{\sum_{t=1}^{T} \Pi_{yt}^{\hat{i}} \Pi_{xt}^{\hat{j}}}{\sum_{i=1}^{K_y} \sum_{t=1}^{T} \Pi_{yt}^{i} \Pi_{xt}^{\hat{j}},}.
+\end{equation}
+
+Another approach to finding the optimal $\Delta^{*}$, is optimizing the problem
+\begin{equation}
+    \Delta^* = \argmin_{\Delta \in \Omega_{\Delta}} - \sum_{t=1}^T \sum_{i=1}^{K_y} \Pi_{yt}^i \ln (\Delta\Pi_{xt})_i,
+\end{equation}
+without using the Jensen inequality.
+As $-\ln(\Delta\Pi_{xt})$ is a convex function, the problem can be solved numerically using Spectral Projected Gradient method\cite{birgin2000}.
+
+We use both approaches (the analytical solution using Jensen inequality and the numerical solution) in our experiments.

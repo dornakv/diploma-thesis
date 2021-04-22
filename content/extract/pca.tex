@@ -1,8 +1,94 @@
 \section{PCA}
 PCA (Principal Component Analysis) is a global feature extractor. It is used to reduce the dimension of data while preserving as much of the data variance as possible.
 
-The goal of PCA is to find an optimal projection from the original data point into a smaller vector space for each datapoint in data matrix.
+Let $x_t \in \mathbb{R}^n$ be a data point, where $t=1,\dots,T$ and $T$ is the amount of data points. We want to project $x_t$ into a $y_t \in \mathbb{R}^k$, where $k < n$. We want to find the optimal parameters $P$ of the parametric reduction mapping $\psi_P: \mathbb{R}^n \rightarrow \mathbb{R}^k$ and the parametric reconstruction mapping $\psi_P^{-1}: \mathbb{R}^k \rightarrow \mathbb{R}^n$. The optimal parameters $P^{*}$ minimize the reconstruction error, i.e.,
+\begin{equation}
+    P^{*} \coloneqq \argmin_{P \in \rho} \sum_{t=1}^T \norm{x_t - \psi_P^{-1}(\psi_P(x_t))},
+    \label{eq:mapping_optimization}
+\end{equation}
+where $\psi$ denotes the set of feasible parameters and $\norm{x_t - \psi_P^{-1}(\psi_P(x_t))}$ is the reconstruction error of a datapoint.
 
-Let $x_t \in \mathbb{R}^n$ be a data point, where $t=1,\dots,T$ and $T$ is the amount of data points. We want to project $x_t$ into a $y_t \in \mathbb{R}^k$, where $k < n. Therefore, we need to find a mapping $\psi^{*}: \mathbb{R}^n \rightarrow \mathbb{R}^l$
+PCA uses the mappings
+\begin{equation}
+    \psi_{[Q,b]}^{-1}(y) \coloneqq Qy+b, \psi_{[Q,b]}(x) \coloneqq Q^{\top}(x-b),
+    \label{eq:pca_mappings}
+\end{equation}
+with parameters $b \in \mathbb{R}^n$ and $Q \in \mathbb{R}^{n,k}$ with orthonormal columns, i.e.,
+\begin{equation}
+    Q^{\top}Q = I \in \mathbb{R}^{k,k}.
+    \label{eq:pca_identity}
+\end{equation}
 
+Substituing \eqref{eq:pca_mappings}, \eqref{eq:pca_identity} into the optimization problem \eqref{eq:mapping_optimization} and using the square Euclidean norm for meassuring the reconstruction error, we get the optimization problem
+\begin{equation}
+    [Q^{*}, b^{*}] \coloneqq \argmin_{Q,b} \sum_{t=1}^T \norm{x_t - (QQ^{\top}(x_t-b) + b)}^2_2 \text{s.t.} Q^{\top}Q=I.
+    \label{eq:pca_optimization}
+\end{equation}
+The objective function $f(Q,b)$ of \eqref{eq:pca_optimization} can be rewritten to the form
+\begin{equation}
+    f(Q,b)=\sum_{t=1}^T (x_t^{\top}x_t - 2 x_t^{\top}b + b^{\top}b - x_t^{\top}QQ^{\top}x_t + 2x_t^{\top}QQ^{\top}b - b^{\top}QQ^{\top}b),
+    \label{eq:pca_obj_fun}
+\end{equation}
+and the optimality condition of $b^{*}$ can be formulated as
+\begin{equation}
+    \nabla_bf(Q,b) = \sum_{t=1}^T(-2x_t+2b+2QQ^{\top}xt-2QQ^{\top}b)=0,
+\end{equation}
+which is equivalent to
+\begin{equation}
+    (I-QQ^{\top})\sum_{t=1}^T(b-x_t)=0.
+    \label{eq:pca_opt_b}
+\end{equation}
+As $k<n$, $Q \in \mathbb{R}^{n,k}$ is not a full column rank and $QQ^{\top} \neq = I$. The unique solution of \eqref{eq:pca_opt_b} is
+\begin{equation}
+    b^{*} = \frac{1}{T}\sum_{t=1}^T x_t.
+\end{equation}
+Moreover, the Hessian matrix
+\begin{equation}
+    \nabla_{b,b}^2 f(Q,b)=2(I-QQ^{\top}),
+    \label{eq:pca_sol_b}
+\end{equation}
+is symmetric positive definitive matrix, therefore the objective function \eqref{eq:pca_obj_fun} is strictly convex (in the variable $b$) and \eqref{eq:pca_sol_b} is unique minimizer.
 
+Let us denote the shifted data by
+\begin{equation}
+    \hat{x_t} \coloneqq x_t - b^* , t=1, \dots, T
+\end{equation}
+and write the objective function of \eqref{eq:pca_obj_fun} as
+\begin{equation}
+    f(Q,b^*) = \sum_{t=1}^T \norm{\hat{x_t} - QQ^{\top}\hat{x_t}}_2^2 = \sum_{t=1}^T (\hat{x_t}^{\top}\hat{x_t} - \hat{x_t}^{\top} QQ^{\top} \hat{x_t}).
+    \label{eq:pca_obj_fun_Q}
+\end{equation}
+We can simplify \eqref{eq:pca_obj_fun_Q} using properties of the matrix trace:
+\begin{equation}
+    f(Q,b^*) = \sum_{t=1}^T \text{trace} (\hat{x_t}^{\top}\hat{x_t}) - \sum_{t=1}^T \text{trace} (\hat{x_t}^{\top} QQ^{\top} \hat{x_t})
+    = \text{trace}(\text{cov}(x)) - \text{trace}(Q^{\top} \text{cov}(x) Q ),
+\end{equation}
+where cov($x$) is the covariance matrix of $x$ defined as
+\begin{equation}
+    \text{cov}(x) \coloneqq \sum_{t=1}^T(x_t-b^*)(x_t-b^*)^{\top} = \sum_{t=1}^T\hat{x_t}\hat{x_t}^{\top}.
+\end{equation}
+The argument of the minimum is independent of constants in the objective function. Therefore, we can reformulate the optimization problem \eqref{eq:pca_optimization} (in terms of variable $Q$) as
+\begin{equation}
+    \begin{split}
+        [Q^*] &= \argmin_{Q^{\top}Q=I} f(Q,b^*) = \argmin_{Q^{\top}Q=I} -\text{trace}(Q^{\top}\text{cov}(x)Q) \\&= \argmax_{Q^{\top}Q=I} \text{trace}(Q^{\top}\text{cov}(x)Q) \\&= \argmax_{\forall j:q_j^{\top}q_j=1} \sum_{j=1}^k q_j^{\top} \text{cov}(x) q_j,
+    \end{split}
+    \label{eq:pca_optimization_final}
+\end{equation}
+where $q_j , j=1,\dots,k$ denote the (orthonormal) columns of the matrix $Q \in \mathbb{R}^{n,k}$. The Lagrange function corresponding to the problem \eqref{eq:pca_optimization_final} is given by
+\begin{equation}
+    L(Q, \lambda) \coloneqq \sum_{j=1}^k q_j^{\top} \text{cov}(x)q_j - \sum_{j=1}^k \lambda_j (q_j^{\top} q_j - 1),
+\end{equation}
+where $\lambda \in \mathbb{R}^K$ denotes Lagrange multiplier correponding to equality constraints. The first Karush-Kuhn-Tucker conditions can be derived as
+\begin{equation}
+    \nabla_{q_j}L(Q,\lambda) = 2 \text{cov}(x)q_j-2\lambda_jq_j=0, j=1,\dots,k,
+\end{equation}
+which are the eigenvalue equations
+\begin{equation}
+    \text{cov}(x)q_j=\lambda_j q_j, j=1,\dots,k.
+    \label{eq:pca_eig}
+\end{equation}
+If we substitute \eqref{eq:pca_eig} into objective function \eqref{eq:pca_optimization_final}, we get
+\begin{equation}
+    \sum_{j=1}^k q_j^{\top} \text{cov}(x)q_j = \sum_{j=1}^k \lambda_j q_j^{\top}q_j = \sum_{j=1}^k \lambda_j.
+\end{equation}
+As the problem \eqref{eq:pca_optimization_final} is maximization problem, the optimal $Q^*$ consists of (orthonormal) eigenvectors which correspond to $k$ largest eigenvalues.
