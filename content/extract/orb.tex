@@ -1,19 +1,19 @@
 \section{ORB}
 ORB (Oriented FAST and Rotated BRIEF) is a local feature extractor proposed by Ethan Rublee, Vincent Rabaud, Kurt Konolige and Gary Bradski in 2011 \cite{Rublee2011}.
 
-The algorithm builds on a FAST (Features from Accelerated Segment Test) corner detetector\cite{Rosten2006} and a BRIEF (Binary Robust Independent Elementary Features) descriptor\cite{Calonder2010}.
+The algorithm builds on a FAST (Features from Accelerated Segment Test) corner detector\cite{Rosten2006} and a BRIEF (Binary Robust Independent Elementary Features) descriptor\cite{Calonder2010}.
 
-\subsection{Keypoint Detection}
+\subsection{Key-point Detection}
 The ORB algorithm uses FAST-9 variant of the FAST corner detector. This detector compares each pixel intensity (denoted as $I_p$) in an image with the intensities of pixels in circle of radius $9$ around the pixel.
 
-Let $n\in\mathbb{N}$ and threshold $t\in\mathbb{R}^{+}$ be given. Let $S$ be a set of pixels in a circle of radius $9$ around the examined pixel. Let us denote $I_x$ as the intensity of a pixel $x$. The examined pixel is selected as a corner, if there exists a set of $n$ continguous pixels $S_n \in S$, where $\forall x \in S_n: I_x + t < I_p$, or $\forall x \in S_n: I_x - t > I_p$.
+Let $n\in\mathbb{N}$ and threshold $t\in\mathbb{R}^{+}$ be given. Let $S$ be a set of pixels in a circle of radius $9$ around the examined pixel. Let us denote $I_x$ as the intensity of a pixel $x$. The examined pixel is selected as a corner, if there exists a set of $n$ contiguous pixels $S_n \in S$, where $\forall x \in S_n: I_x + t < I_p$, or $\forall x \in S_n: I_x - t > I_p$.
 
-The selected corners, i.e. keypoints are then ordered according to a Harris corner measure\cite{Harris1988}. For $N$ keypoints, the threshold is selected low enough to get more than $N$ keypoints, then the best $N$ keypoints (according to Harris corner measure) are selected.
+The selected corners, i.e. key-points are then ordered according to a Harris corner measure\cite{Harris1988}. For $N$ key-points, the threshold is selected low enough to get more than $N$ key-points, then the best $N$ key-points (according to Harris corner measure) are selected.
 
-To find multi-scale features, the scale pyramid of an image is generated and keypoints are generated at each level in the pyramid.
+To find multi-scale features, the scale pyramid of an image is generated and key-points are generated at each level in the pyramid.
 
-\subsection{Keypoint Description}
-To ensure the descriptor's invariance to rotation, we need to determine the keypoint orientation. For this, the intensity centroid\cite{Rosin1999} is used. The intensity centroid expects the intensity of a keypoint to be offset from its center. The vector from the center to the centroid is used for the keypoint orientation.
+\subsection{Key-point Description}
+To ensure the descriptor's invariance to rotation, we need to determine the key-point orientation. For this, the intensity centroid\cite{Rosin1999} is used. The intensity centroid expects the intensity of a key-point to be offset from its center. The vector from the center to the centroid is used for the key-point orientation.
 
 Given an image $I(x,y)$, the centroid is found using a moment of a patch
 \begin{equation}
@@ -26,11 +26,11 @@ The centroid is then located as
         \frac{m_{10}}{m_{00}} \text{, } \frac{m_{01}}{m_{00}}
     \end{pmatrix},
 \end{equation}
-from which we can obtain the keypoint orientation
+from which we can obtain the key-point orientation
 \begin{equation}
     \theta = \text{atan}2(m_{01},m_{10}),
 \end{equation}
-where atan$2$ is the quarant-aware version of arctan.
+where atan$2$ is the quadrant-aware version of arctan.
 
 As an ORB descriptor, a variation on BRIEF descriptor is used. The BRIEF descriptor is a vector of binary values. This allows for fast matching using a Hamming distance.
 
@@ -55,11 +55,11 @@ where $n$ is the size of our descriptor. The BRIEF descriptor is then defined as
     f_n(\boldsymbol{p}) \coloneqq \sum_{i=1}^{n} 2^{i-1}\tau(\boldsymbol{p};x_i, y_i)
 \end{equation}
 
-The steered version of a BRIEF descriptor, according to the orientation $\theta$ of the keypoint, can be created by using a coresponding rotation matrix $\boldsymbol{R}_\theta$:
+The steered version of a BRIEF descriptor, according to the orientation $\theta$ of the key-point, can be created by using a corresponding rotation matrix $\boldsymbol{R}_\theta$:
 \begin{equation}
     \boldsymbol{S_\theta} = \boldsymbol{R}_\theta \boldsymbol{S}.
 \end{equation}
-The sets of pairs are precomputed in a lookup table for discretized $\theta$ in icrements of $\frac{2\pi}{30}$ to improve speed. In the end, the steered BRIEF descriptor becomes
+The sets of pairs are precomputed in a lookup table for discretized $\theta$ in increments of $\frac{2\pi}{30}$ to improve speed. In the end, the steered BRIEF descriptor becomes
 \begin{equation}
     g_n(\boldsymbol{p}, \theta) \coloneqq f_n(\boldsymbol{p}) | (x_i, y_i) \in \boldsymbol{S}_\theta.
 \end{equation}

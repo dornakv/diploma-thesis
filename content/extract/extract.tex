@@ -2,7 +2,7 @@
 
 We can attempt to classify the raw image data; the image being represented as a vector of light intensities at each pixel. However, it might be beneficial to transform the image data into a feature space using a feature extraction technique. The feature extraction techniques can be split into two categories. Local feature extractors and global feature extractors. %https://link.springer.com/content/pdf/10.1007%2F978-3-540-31638-1.pdf 219-
 
-Local feature extractors localise such points in an image, which could be found regardless of the image subject posstion. These points are called keyponits. The area around such keypoints is then described using a vector called descriptor. The descriptors are created in a way, which allows for matching similar features.
+Local feature extractors localise such points in an image, which could be found regardless of the image subject position. These points are called key-points. The area around such key-points is then described using a vector called descriptor. The descriptors are created in a way, which allows for matching similar features.
 
 Global feature extractors transform the whole image into a lower dimensional vector, attempting to retain the most important information.
 
@@ -15,6 +15,8 @@ In this section, we describe the four feature extraction algorithms.
 \input{content/extract/surf}
 
 \input{content/extract/orb}
+
+\input{content/extract/bovw}
 
 \input{content/extract/pca}
 

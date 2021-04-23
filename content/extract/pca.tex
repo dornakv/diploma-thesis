@@ -6,7 +6,7 @@ Let $x_t \in \mathbb{R}^n$ be a data point, where $t=1,\dots,T$ and $T$ is the a
     P^{*} \coloneqq \argmin_{P \in \rho} \sum_{t=1}^T \norm{x_t - \psi_P^{-1}(\psi_P(x_t))},
     \label{eq:mapping_optimization}
 \end{equation}
-where $\psi$ denotes the set of feasible parameters and $\norm{x_t - \psi_P^{-1}(\psi_P(x_t))}$ is the reconstruction error of a datapoint.
+where $\psi$ denotes the set of feasible parameters and $\norm{x_t - \psi_P^{-1}(\psi_P(x_t))}$ is the reconstruction error of a data-point.
 
 PCA uses the mappings
 \begin{equation}
@@ -19,7 +19,7 @@ with parameters $b \in \mathbb{R}^n$ and $Q \in \mathbb{R}^{n,k}$ with orthonorm
     \label{eq:pca_identity}
 \end{equation}
 
-Substituing \eqref{eq:pca_mappings}, \eqref{eq:pca_identity} into the optimization problem \eqref{eq:mapping_optimization} and using the square Euclidean norm for meassuring the reconstruction error, we get the optimization problem
+Substituting \eqref{eq:pca_mappings}, \eqref{eq:pca_identity} into the optimization problem \eqref{eq:mapping_optimization} and using the square Euclidean norm for measuring the reconstruction error, we get the optimization problem
 \begin{equation}
     [Q^{*}, b^{*}] \coloneqq \argmin_{Q,b} \sum_{t=1}^T \norm{x_t - (QQ^{\top}(x_t-b) + b)}^2_2 \text{s.t.} Q^{\top}Q=I.
     \label{eq:pca_optimization}
@@ -78,7 +78,7 @@ where $q_j , j=1,\dots,k$ denote the (orthonormal) columns of the matrix $Q \in 
 \begin{equation}
     L(Q, \lambda) \coloneqq \sum_{j=1}^k q_j^{\top} \text{cov}(x)q_j - \sum_{j=1}^k \lambda_j (q_j^{\top} q_j - 1),
 \end{equation}
-where $\lambda \in \mathbb{R}^K$ denotes Lagrange multiplier correponding to equality constraints. The first Karush-Kuhn-Tucker conditions can be derived as
+where $\lambda \in \mathbb{R}^K$ denotes Lagrange multiplier corresponding to equality constraints. The first Karush-Kuhn-Tucker conditions can be derived as
 \begin{equation}
     \nabla_{q_j}L(Q,\lambda) = 2 \text{cov}(x)q_j-2\lambda_jq_j=0, j=1,\dots,k,
 \end{equation}

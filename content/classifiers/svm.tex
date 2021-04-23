@@ -15,7 +15,7 @@ where \( \omega \) is the normalized normal vector of the hyperplane \( H \), an
 \end{equation}
 is the bias from the origin.
 
-First, we consider linearly separable training data. The two classes of data are distinguished by two hyperplanes so that the distance between them is maximized. The region bound by these hyperplanes is called the margin. The hyperplane that lies halfway between them is called the maximum-margin hyperplane. These hyperplanes are described by the followin equation:
+First, we consider linearly separable training data. The two classes of data are distinguished by two hyperplanes so that the distance between them is maximized. The region bound by these hyperplanes is called the margin. The hyperplane that lies halfway between them is called the maximum-margin hyperplane. These hyperplanes are described by the following equation:
 \begin{equation}
     \boldsymbol{w}^T\boldsymbol{x}-\widetilde{b}=\pm1.
     \label{eq:svm_hyperplanes}
@@ -86,7 +86,7 @@ where \( C \) is a penalty for the misclassification error. The formulation \eqr
     \end{cases}
     \label{eq:svm:soft_margin_dual}
 \end{equation}
-where \( \boldsymbol{e} = [1,1, ...,1]^{\top} \), \( \boldsymbol{o} = [0,0, ...,0]^{\top} \), \( \boldsymbol{X} = [\boldsymbol{x_1},\boldsymbol{x_2}, ...,\boldsymbol{x_n}] \), \( \boldsymbol{y} = [y_1,y_2, ...,y_n]^{\top} \), \( Y = \text{diag}(\boldsymbol{y}) \), \( \boldsymbol{B_e} = [\boldsymbol{y}^T] \) and \( \boldsymbol{K}\coloneqq\boldsymbol{X}^T\boldsymbol{X} \) is the Gram matrix which is symetric positive semi-definite (SPSD)\cite{Aeta2018}. The Hessian matrix in \eqref{eq:svm:soft_margin_dual}
+where \( \boldsymbol{e} = [1,1, ...,1]^{\top} \), \( \boldsymbol{o} = [0,0, ...,0]^{\top} \), \( \boldsymbol{X} = [\boldsymbol{x_1},\boldsymbol{x_2}, ...,\boldsymbol{x_n}] \), \( \boldsymbol{y} = [y_1,y_2, ...,y_n]^{\top} \), \( Y = \text{diag}(\boldsymbol{y}) \), \( \boldsymbol{B_e} = [\boldsymbol{y}^T] \) and \( \boldsymbol{K}\coloneqq\boldsymbol{X}^T\boldsymbol{X} \) is the Gram matrix which is symmetric positive semi-definite (SPSD)\cite{Aeta2018}. The Hessian matrix in \eqref{eq:svm:soft_margin_dual}
 \begin{equation}
     \boldsymbol{H} \coloneqq \boldsymbol{Y}^T\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{Y}
     \label{eq:svm:hessian}
@@ -114,7 +114,7 @@ Instead of the linear sum of the loss functions $\xi_i$ in \eqref{eq:svm:soft_ma
     \end{cases}
     \label{eq:svm:soft_margin_minimization_l2}
 \end{equation}
-The problem \eqref{eq:svm:soft_margin_minimization_l2} is called $l2$-loss $l2$-regularized SVM. The dual formulation can again be optained by using the Lagrange duality:
+The problem \eqref{eq:svm:soft_margin_minimization_l2} is called $l2$-loss $l2$-regularized SVM. The dual formulation can again be obtained by using the Lagrange duality:
 \begin{equation}
     \argmin_{\boldsymbol{\alpha}} \frac{1}{2} \boldsymbol{\alpha}^T(\boldsymbol{H}+C^{-1}\boldsymbol{I})\boldsymbol{\alpha} - \boldsymbol{\alpha}^Te \text{ s.t. } 
     \begin{cases}
@@ -125,3 +125,21 @@ The problem \eqref{eq:svm:soft_margin_minimization_l2} is called $l2$-loss $l2$-
 \end{equation}
 
 The Hessian matrix $\boldsymbol{H}$, regularized by the matrix $C^{-1}\boldsymbol{I}$ is symmetric positive definite, therefore, this optimization problem should be more stable than the $l1$-loss $l2$-regularized SVM problem.
+
+\subsection{Hyperparameter optimization}
+Hyperparameter optimization is the process of selecting good parameters for a classifier. In SVM, we need to find a good penalty $C$. One approach to hyperparameter optimization is a Grid search.
+
+Grid search is an exhaustive searching through a user specified subset of parameters. The classifier is trained with each combination of the subset. The combination, which yield the best result is then selected. By the best result, we mean the highest score of a user specified metric.
+
+To test the hyperparameter selection, we need new, independent data from the data used in a training step. This is accomplished by splitting the data into subsets. The subsets are selected using a stratified cross-validation technique.
+
+\subsection{Cross-validation}
+Cross-validation is an approach to split a dataset into a training and validation subset. For each set of hyperparameters, a dataset is split into $k$ subsets (folds) of an equal size. One of the subsets is kept as a validation set, while the model is trained on the other $k-1$ folds. The process is repeated $k$ times, selecting each fold as a validation subset. The results of all $k$ runs are averaged for a final score. This process can be seen in \figref{fig:k-fold}.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{Figures/svm/k-fold.jpg}
+    \caption[$k$-fold CV splits data into $k$ folds and trains the model $k$ times always leaving out a different fold as a validation set.]{$k$-fold CV splits data into $k$ folds and trains the model $k$ times always leaving out a different fold as a validation set. \cite{crossval}}
+    \label{fig:k-fold}
+\end{figure}
+
+As a randomly selected fold might not represent the classes in the same ratio as the whole set, a stratified cross-validation is used. The random folds are selected in a way, where the ratio of the classes is roughly equal to the ratio of classes in the whole dataset.
