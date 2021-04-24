@@ -1,5 +1,5 @@
 \section{Bayesian Model}
-This classifier is suitable for classifying data, represented by a stochastic vector. The BoVW data can be easily transformed into a such vector. Instead of each component of the BoVW vector representing the number of key-points in the respective category, the component in our new vector represents the probability of key-points belonging to the respective category.
+This classifier is suitable for classifying data represented by a stochastic vector. The BoVW data can be easily transformed into a such vector. Instead of each component of the BoVW vector representing the number of key-points in the respective category, the component in our new vector represents the probability of key-points belonging to the respective category.
 
 Let us denote the stochastic data vector $\Pi_{xt} \in \mathbb{R}^{K_x}, t=1,\dots,T$, where $T$ is the number of samples. Let the vector $\Pi{yt}\in \mathbb{R}^{K_y}$ be a vector of probabilities, with which $\Pi{xt}$ belongs to each category, and $K_y$ the number of categories.
 
@@ -45,19 +45,17 @@ Let $\Delta$ be the optimal stochastic matrix. There exist $\lambda_j \in \mathb
 \begin{equation}
     L(\Delta, \lambda) = - \sum_{t=1}^T \sum_{i=1}^{K_y} \sum_{j=1}^{K_x} \Pi_{yt}^i \Pi_{xt}^j \ln \Delta_{ij} + \sum_{j=1}^{K_x} \lambda_j (\sum_{i=1}^{K_y} \Delta_{ij} - 1)
 \end{equation}
-is the Lagrange function. We can find the optimal $\Delta^*$:
+is the Lagrange function. The Karush-Kuhn Tucker conditions are
 \begin{equation}
     \nabla_{\Delta_{\hat{i}\hat{j}}} L(\Delta_{\hat{i}\hat{j}}, \lambda) = - \frac{1}{\Delta_{\hat{i}\hat{j}}} \sum_{t=1}^{T} \Pi_{yt}^{\hat{i}} \Pi_{xt}^{\hat{j}} + \lambda_{\hat{j}} = 0,
+    \label{eq:bayes_first_kkt}
 \end{equation}
+and
 \begin{equation}
-    \nabla_{\Delta_{\hat{j}}} = \sum_{i=1}^{K_y} \Delta_{i\hat{j}} - 1 = 0,
+    \nabla_{\Delta_{\hat{j}}} = \sum_{i=1}^{K_y} \Delta_{i\hat{j}} - 1 = 0.
+    \label{eq:bayes_second_kkt}
 \end{equation}
-\begin{equation}
-    \Delta_{\hat{i}\hat{j}} = \frac{\sum_{t=1}^{T} \Pi_{yt}^{\hat{i}} \Pi_{xt}^{\hat{j}}}{\lambda{\hat{j}}},
-\end{equation}
-\begin{equation}
-    \lambda_{\hat{j}} = \sum_{i=1}^{K_y} \sum_{t=1}^{T} \Pi_{yt}^{i} \Pi_{xt}^{\hat{j}},
-\end{equation}
+From \eqref{eq:bayes_first_kkt} and \eqref{eq:bayes_second_kkt}, we get the optimal $\Delta_{\hat{i}\hat{j}}^*$
 \begin{equation}
     \Delta_{\hat{i}\hat{j}}^{*} = \frac{\sum_{t=1}^{T} \Pi_{yt}^{\hat{i}} \Pi_{xt}^{\hat{j}}}{\sum_{i=1}^{K_y} \sum_{t=1}^{T} \Pi_{yt}^{i} \Pi_{xt}^{\hat{j}},}.
 \end{equation}
