@@ -1,11 +1,11 @@
 \section{Bag of Visual Words}
 Local feature extractors provide us with varied descriptors for each image. However, for classification, we need each image to be represented by a single vector. This can be achieved using a Bag of Words technique.
 
-Bag of Words (BoW) is a technique, which represents each sample in a dataset as a multiset of its words. In general, these words do not have to be literal words, but can be any categorization of an information provided by the sample.
+Bag of Words (BoW) is a technique, which represents each sample in a dataset as a multiset of its words. In general, these words do not have to be literal words but can be any categorization of information provided by the sample.
 
-First BoW needs to generate a dictionary. The dictionary is a set of $k \in \mathbb{N}$ categories of words called bins. The BoW then assigns each word to a bin. Finally, for each sample in the dataset, a histograms of amounts of words belonging to each bin is created.
+First BoW needs to generate a dictionary. The dictionary is a set of $k \in \mathbb{N}$ categories of words called bins. The BoW then assigns each word to a bin. Finally, for each sample in the dataset, a histogram of amounts of words belonging to each bin is created.
 
-The approach is most commonly used with text documents as samples. In this example, the dictionary consists of every unique word in the dataset. The words are then assigned to a bin of said word.
+The approach is most commonly used with text documents as samples. In this example, the dictionary consists of every unique word in the dataset. The words are then assigned to a bin of said words.
 
 For example, in a dictionary consisting of bins \{ \say{Peter}, \say{run}, \say{talked}, \say{to} \}, a sample sentence \say{Peter talked to Peter} would produce the following histogram:
 \begin{equation}
@@ -26,10 +26,10 @@ where \(c_1, c_2, ..., c_k \) are the centroids of \(S_1, S_2, ..., S_k \), resp
 The algorithm starts by selecting $k$ random data points as the centroids. Then alternates between two steps until a terminate condition is met:
 \begin{description}
     \item{\textbf{Assignment step:}} Each data point is assigned to the cluster, such that the Euclidean distance between the centroids of the clusters and the current data point is the smallest one.
-    \item{\textbf{Update step:}} For each cluster, new centroid is computed as the mean of data points belonging to this cluster.
+    \item{\textbf{Update step:}} For each cluster, a new centroid is computed as the mean of data points belonging to this cluster.
 \end{description}
 
-The terminate condition is met, when the ratio of the samples, for which the assigned cluster changes, to the total amount of samples is smaller than a specified threshold. The steps of the algorithm can be seen in \figref{fig:k_means_alg}.
+The terminate condition is met, when the ratio of the samples, for which the assigned cluster changes, to the total amount of samples, is smaller than a specified threshold. The steps of the algorithm can be seen in \figref{fig:k_means_alg}.
 \begin{figure}[ht]
     \begin{subfigure}[t]{0.2\textwidth}
         \includegraphics[width=\textwidth]{Figures/k-means/k-means_inicial_step.png}
@@ -54,4 +54,4 @@ The terminate condition is met, when the ratio of the samples, for which the ass
     \caption[Lloyd's algorithm demonstration.]{Lloyd algorithm demonstration. \cite{Wikikmeans}}
     \label{fig:k_means_alg}
 \end{figure}
-The challenge is determining the $k$ number of clusters, and therefore the size of visual dictionary. In our experiments, we try different settings for $k$ in order to find a clustering, which best represents our data.
+The challenge is determining the $k$ number of clusters, and therefore the size of the visual dictionary. In our experiments, we try different settings for $k$ to find a clustering, which best represents our data.
