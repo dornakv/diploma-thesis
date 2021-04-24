@@ -1,7 +1,7 @@
 \section{Bayesian Model}
-This classifier is suitable for classifying data, represented by a stochastic vector. The BoVW data can be easily transformed into such vector. Instead of each component of the BoVW vector representing the amount of key-points in respective category, the component in our new vector represents the probability of key-points belonging in respective category.
+This classifier is suitable for classifying data, represented by a stochastic vector. The BoVW data can be easily transformed into a such vector. Instead of each component of the BoVW vector representing the number of key-points in the respective category, the component in our new vector represents the probability of key-points belonging to the respective category.
 
-Let us denote the stochastic data vector $\Pi_{xt} \in \mathbb{R}^{K_x}, t=1,\dots,T$, where $T$ is the amount of samples. Let the vector $\Pi{yt}\in \mathbb{R}^{K_y}$ be vector of probabilities, with which $\Pi{xt}$ belongs to each category, and $K_y$ the amount of categories.
+Let us denote the stochastic data vector $\Pi_{xt} \in \mathbb{R}^{K_x}, t=1,\dots,T$, where $T$ is the number of samples. Let the vector $\Pi{yt}\in \mathbb{R}^{K_y}$ be a vector of probabilities, with which $\Pi{xt}$ belongs to each category, and $K_y$ the number of categories.
 
 Given a stochastic data vector $\Pi_x$, we can describe the transformation $\mathbb{R}^{K_x} \rightarrow \mathbb{R}^{K_y}$ using a matrix $\Delta \in \mathbb{R}^{K_y, K_x}$:
 \begin{equation}
@@ -13,7 +13,7 @@ Given a stochastic data vector $\Pi_x$, we can describe the transformation $\mat
         P(\Pi_y^{K_y} | \Pi_x^1) & P(\Pi_y^{K_y} | \Pi_x^2) & \dots & P(\Pi_y^{K_y} | \Pi_x^{K_x})
     \end{bmatrix},
 \end{equation}
-where $\Pi_x^n$ is the $n$-th element of $\Pi_x$, similar for $\Pi_y^n$, and the matrix $\Delta$ is a left stochastic matrix.
+where $\Pi_x^n$ is the $n$-th element of $\Pi_x$, similar to $\Pi_y^n$, and the matrix $\Delta$ is a left stochastic matrix.
 
 The search for the optimal $\Delta^{*}$ can be written as
 \begin{equation}
@@ -23,7 +23,7 @@ where $\Omega_{\Delta}$ is a set of left stochastic matrices. The dist($\Pi_{yt}
 \begin{equation}
     \text{dist}(\Pi_{yt}, \Delta\Pi_{xt}) = - \sum_{i=1}^{K_y} \Pi_{yt}^i \ln\frac{(\Delta\Pi_{xt})_i}{\Pi_{yt}^i} = - \sum_{i=1}^{K_y} \Pi_{yt}^i (\ln (\Delta\Pi_{xt})_i - \ln \Pi_{yt}^i).
 \end{equation}
-For the purpose of optimization, the term $\ln \Pi_{yt}^i$ is constant, therefore it can be ignored:
+For the optimization, the term $\ln \Pi_{yt}^i$ is constant, therefore it can be ignored:
 \begin{equation}
     \text{dist}(\Pi_{yt}, \Delta\Pi_{xt}) \propto - \sum_{i=1}^{K_y} \Pi_{yt}^i \ln (\Delta\Pi_{xt})_i.
 \end{equation}
@@ -62,11 +62,11 @@ is the Lagrange function. We can find the optimal $\Delta^*$:
     \Delta_{\hat{i}\hat{j}}^{*} = \frac{\sum_{t=1}^{T} \Pi_{yt}^{\hat{i}} \Pi_{xt}^{\hat{j}}}{\sum_{i=1}^{K_y} \sum_{t=1}^{T} \Pi_{yt}^{i} \Pi_{xt}^{\hat{j}},}.
 \end{equation}
 
-Another approach to finding the optimal $\Delta^{*}$, is optimizing the problem
+Another approach to finding the optimal $\Delta^{*}$ is optimizing the problem
 \begin{equation}
     \Delta^* = \argmin_{\Delta \in \Omega_{\Delta}} - \sum_{t=1}^T \sum_{i=1}^{K_y} \Pi_{yt}^i \ln (\Delta\Pi_{xt})_i,
 \end{equation}
 without using the Jensen inequality.
-As $-\ln(\Delta\Pi_{xt})$ is a convex function, the problem can be solved numerically using Spectral Projected Gradient method\cite{birgin2000}.
+As $-\ln(\Delta\Pi_{xt})$ is a convex function, the problem can be solved numerically using the Spectral Projected Gradient method\cite{birgin2000}.
 
 We use both approaches (the analytical solution using Jensen inequality and the numerical solution) in our experiments.
