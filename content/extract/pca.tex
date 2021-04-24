@@ -1,7 +1,7 @@
-\section{PCA}
-PCA (Principal Component Analysis) is a global feature extractor. It is used to reduce the dimension of data while preserving as much of the data variance as possible.
+\section{Principal Component Analysis}
+Principal Component Analysis (PCA) is a global feature extractor. It is used to reduce the dimension of data while preserving as much of the data variance as possible.
 
-Let $x_t \in \mathbb{R}^n$ be a data point, where $t=1,\dots,T$ and $T$ is the amount of data points. We want to project $x_t$ into a $y_t \in \mathbb{R}^k$, where $k < n$. We want to find the optimal parameters $P$ of the parametric reduction mapping $\psi_P: \mathbb{R}^n \rightarrow \mathbb{R}^k$ and the parametric reconstruction mapping $\psi_P^{-1}: \mathbb{R}^k \rightarrow \mathbb{R}^n$. The optimal parameters $P^{*}$ minimize the reconstruction error, i.e.,
+Let $x_t \in \mathbb{R}^n$ be a data point, where $t=1,\dots,T$ and $T$ is the number of data points. We want to project $x_t$ into a $y_t \in \mathbb{R}^k$, where $k < n$. We want to find the optimal parameters $P$ of the parametric reduction mapping $\psi_P: \mathbb{R}^n \rightarrow \mathbb{R}^k$ and the parametric reconstruction mapping $\psi_P^{-1}: \mathbb{R}^k \rightarrow \mathbb{R}^n$. The optimal parameters $P^{*}$ minimize the reconstruction error, i.e.,
 \begin{equation}
     P^{*} \coloneqq \argmin_{P \in \rho} \sum_{t=1}^T \norm{x_t - \psi_P^{-1}(\psi_P(x_t))},
     \label{eq:mapping_optimization}
@@ -47,7 +47,7 @@ Moreover, the Hessian matrix
     \nabla_{b,b}^2 f(Q,b)=2(I-QQ^{\top}),
     \label{eq:pca_sol_b}
 \end{equation}
-is symmetric positive definitive matrix, therefore the objective function \eqref{eq:pca_obj_fun} is strictly convex (in the variable $b$) and \eqref{eq:pca_sol_b} is unique minimizer.
+is a symmetric positive definitive matrix, therefore the objective function \eqref{eq:pca_obj_fun} is strictly convex (in the variable $b$) and \eqref{eq:pca_sol_b} is a unique minimizer.
 
 Let us denote the shifted data by
 \begin{equation}
@@ -91,4 +91,4 @@ If we substitute \eqref{eq:pca_eig} into objective function \eqref{eq:pca_optimi
 \begin{equation}
     \sum_{j=1}^k q_j^{\top} \text{cov}(x)q_j = \sum_{j=1}^k \lambda_j q_j^{\top}q_j = \sum_{j=1}^k \lambda_j.
 \end{equation}
-As the problem \eqref{eq:pca_optimization_final} is maximization problem, the optimal $Q^*$ consists of (orthonormal) eigenvectors which correspond to $k$ largest eigenvalues.
+As the problem \eqref{eq:pca_optimization_final} is a maximization problem, the optimal $Q^*$ consists of (orthonormal) eigenvectors which correspond to the $k$ largest eigenvalues.
