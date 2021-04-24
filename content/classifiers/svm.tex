@@ -2,7 +2,7 @@
 The SVM (Support Vector Machine) is a supervised learning classifier originally designed for binary classifications. It was introduced by Vladimir N. Vapnik and Alexey Ya. Chervonenkis in 1963 \cite{Cortes1995}.
 
 Let \( T := \{(\boldsymbol{x_1}, y_1),(\boldsymbol{x_2}, y_2),...,(\boldsymbol{x_n}, y_n)\} \),
-be the training dataset, where $n$ is the number of the samples, \( \boldsymbol{x_i} \in \mathbb{R}^m \), \( i \in \{1,2,\dots,n\} \),
+be the training dataset, where $n$ is the number of the samples, \( \boldsymbol{x_i} \in \mathbb{R}^m \), \( i \in \{1,2,\dots,n\} \)
 is the sample and \( y_i \in \{-1, 1\} \) is the label related to the sample \( \boldsymbol{x_i} \). The classification model is represented by the means of the hyperplane \( H \), defined such that:
 \begin{equation}
     H: \boldsymbol{\omega}^T\boldsymbol{x}-\widetilde{b}=0,
@@ -20,12 +20,12 @@ First, we consider linearly separable training data. The two classes of data are
     \boldsymbol{w}^T\boldsymbol{x}-\widetilde{b}=\pm1.
     \label{eq:svm_hyperplanes}
 \end{equation}
-The sample $x_i, i=1,\dots,n$ belongs to the positive class, i.e. $y_i = 1, i=1,\dots,n$, when
+Sample $x_i, i=1,\dots,n$ belongs to the positive class, i.e. $y_i = 1, i=1,\dots,n$, when
 \begin{equation}
-    \boldsymbol{w}^T\boldsymbol{x_i}-\widetilde{b}\geq1
+    \boldsymbol{w}^T\boldsymbol{x_i}-\widetilde{b}\geq1,
     \label{eq:svm_positive_data}
 \end{equation}
-and the negative class, i.e. $y_i = -1, i=1,\dots,n$
+and the negative class, i.e. $y_i = -1, i=1,\dots,n$, when
 \begin{equation}
     \boldsymbol{w}^T\boldsymbol{x_i}-\widetilde{b}\leq-1.
     \label{eq:svm_negative_data}
@@ -68,12 +68,12 @@ Because the training data is nearly never linearly separable, the soft margin ve
 
 The hinge loss function \eqref{eq:svm_hinge_loss} equals $0$ for a sample on the correct side of the corresponding hyperplane \eqref{eq:svm_hyperplanes}. However, for a sample on the wrong side of the corresponding hyperplane \eqref{eq:svm_hyperplanes}, the value of the function is proportional to the distance from the hyperplane.
 
-If we add the hinge loss function \eqref{eq:svm_hinge_loss} to the optimization problem \eqref{eq:svm_hard_margin_minimization}, we get a soft margin SVM optimization problem
+If we add the hinge loss function \eqref{eq:svm_hinge_loss} to optimization problem \eqref{eq:svm_hard_margin_minimization}, we get a soft margin SVM optimization problem
 \begin{equation}
     \argmin_{\boldsymbol{w},b,\xi_i} \frac{1}{2}\|\boldsymbol{w}\|^2 + C\sum_{i = 1}^n\xi_i \text{ s.t. }
     \begin{cases}
         y_i(\boldsymbol{w}^T\boldsymbol{x}_i-b)\geq1 - \xi_i,\\
-        \xi_i \geq 0 , i=1, ...,n.
+        \xi_i \geq 0 , i=1, ...,n,
     \end{cases}
     \label{eq:svm:soft_margin_minimization}
 \end{equation}
@@ -86,12 +86,12 @@ where \( C \) is a penalty for the misclassification error. The formulation \eqr
     \end{cases}
     \label{eq:svm:soft_margin_dual}
 \end{equation}
-where \( \boldsymbol{e} = [1,1, ...,1]^{\top} \), \( \boldsymbol{o} = [0,0, ...,0]^{\top} \), \( \boldsymbol{X} = [\boldsymbol{x_1},\boldsymbol{x_2}, ...,\boldsymbol{x_n}] \), \( \boldsymbol{y} = [y_1,y_2, ...,y_n]^{\top} \), \( Y = \text{diag}(\boldsymbol{y}) \), \( \boldsymbol{B_e} = [\boldsymbol{y}^T] \) and \( \boldsymbol{K}\coloneqq\boldsymbol{X}^T\boldsymbol{X} \) is the Gram matrix which is symmetric positive semi-definite (SPSD)\cite{Aeta2018}. The Hessian matrix in \eqref{eq:svm:soft_margin_dual}
+where \( \boldsymbol{e} = [1,1, \dots,1]^{\top} \), \( \boldsymbol{o} = [0,0, \dots,0]^{\top} \), \( \boldsymbol{X} = [\boldsymbol{x_1},\boldsymbol{x_2}, \dots,\boldsymbol{x_n}] \), \( \boldsymbol{y} = [y_1,y_2, \dots,y_n]^{\top} \), \( Y = \text{diag}(\boldsymbol{y}) \), \( \boldsymbol{B_e} = [\boldsymbol{y}^T] \) and \( \boldsymbol{K}\coloneqq\boldsymbol{X}^T\boldsymbol{X} \) is the Gram matrix which is symmetric positive semi-definite (SPSD)\cite{Aeta2018}. The Hessian matrix in \eqref{eq:svm:soft_margin_dual}
 \begin{equation}
     \boldsymbol{H} \coloneqq \boldsymbol{Y}^T\boldsymbol{X}^T\boldsymbol{X}\boldsymbol{Y}
     \label{eq:svm:hessian}
 \end{equation}
-is also SPSD matrix.
+is also an SPSD matrix.
 
 To recover the normal vector, the formula
 \begin{equation}
@@ -129,7 +129,7 @@ The Hessian matrix $\boldsymbol{H}$, regularized by the matrix $C^{-1}\boldsymbo
 \subsection{Hyperparameter optimization}
 Hyperparameter optimization is the process of selecting good parameters for a classifier. In SVM, we need to find a good penalty $C$. One approach to hyperparameter optimization is a Grid search.
 
-Grid search is an exhaustive searching through a user specified subset of parameters. The classifier is trained with each combination of the subset. The combination, which yield the best result is then selected. By the best result, we mean the highest score of a user specified metric.
+Grid search is an exhaustive searching through a user-specified subset of parameters. The classifier is trained with each combination of the subset. The combination, which yields the best result is then selected. By the best result, we mean the highest score of a user-specified metric.
 
 To test the hyperparameter selection, we need new, independent data from the data used in a training step. This is accomplished by splitting the data into subsets. The subsets are selected using a stratified cross-validation technique.
 
@@ -142,4 +142,4 @@ Cross-validation is an approach to split a dataset into a training and validatio
     \label{fig:k-fold}
 \end{figure}
 
-As a randomly selected fold might not represent the classes in the same ratio as the whole set, a stratified cross-validation is used. The random folds are selected in a way, where the ratio of the classes is roughly equal to the ratio of classes in the whole dataset.
+As a randomly selected fold might not represent the classes in the same ratio as the whole set, stratified cross-validation is used. The random folds are selected in a way, where the ratio of the classes is roughly equal to the ratio of classes in the whole dataset.
