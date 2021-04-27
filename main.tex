@@ -5,6 +5,7 @@
 \usepackage[autostyle=true]{csquotes} % enhanced support for quotation marks, support for biblatex package
 \usepackage[backend=biber, style=iso-numeric, alldates=iso]{biblatex} % bibliography
 \DeclareNameAlias{default}{family-given} % Name format 'last-first' deprecated. Use 'family-given'
+\usepackage{csvsimple}
 \usepackage{amsmath}
 \usepackage{bm}
 \usepackage{amsfonts}
@@ -14,6 +15,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{dirtytalk}
+\usepackage{microtype}
 \emergencystretch=1em
 \newcommand*\Laplace{\mathop{}\!\mathbin\bigtriangleup}
 \newcommand{\figref}[1]{\figurename~\ref{#1}}
@@ -57,6 +59,12 @@ because without them this work would not have happened.}
 
 %% Leading pages printing
 \MakeTitlePages
+
+\listoffigures
+\clearpage
+
+\listoftables
+\clearpage
 
 \include{content/introduction/introduction}
 

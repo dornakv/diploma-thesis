@@ -31,24 +31,25 @@ The algorithm starts by selecting $k$ random data points as the centroids. Then 
 
 The terminate condition is met, when the ratio of the samples, for which the assigned cluster changes, to the total amount of samples, is smaller than a specified threshold. The steps of the algorithm can be seen in \figref{fig:k_means_alg}.
 \begin{figure}[ht]
-    \begin{subfigure}[t]{0.2\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.22\textwidth}
         \includegraphics[width=\textwidth]{Figures/k-means/k-means_inicial_step.png}
-        \caption{Initial centroids are selected.}
+        \caption{At first, random data points are selected as the initial $k$ centroids.}
         \label{fig:k-means-alg:inicial_step}
     \end{subfigure}\hfill
-    \begin{subfigure}[t]{0.2\textwidth}
+    \begin{subfigure}[t]{0.22\textwidth}
         \includegraphics[width=\textwidth]{Figures/k-means/k-means_assignment_step.png}
         \caption{By choosing the nearest centroid, each data point is assigned its cluster.}
         \label{fig:k-means-alg:assignment_step}
     \end{subfigure}\hfill
-    \begin{subfigure}[t]{0.2\textwidth}
+    \begin{subfigure}[t]{0.22\textwidth}
         \includegraphics[width=\textwidth]{Figures/k-means/k-means_update_step.png}
         \caption{New centroids are calculated as means of data points in the cluster.}
         \label{fig:k-means-alg:update_step}
     \end{subfigure}\hfill
-    \begin{subfigure}[t]{0.2\textwidth}
+    \begin{subfigure}[t]{0.22\textwidth}
         \includegraphics[width=\textwidth]{Figures/k-means/k-means_assignment_step_2.png}
-        \caption{Steps \figref{fig:k-means-alg:assignment_step} and \figref{fig:k-means-alg:update_step} are repeated.}
+        \caption{Steps in (b) and (c) are repeated until the terminate condition is met.}
         \label{fig:k-means-alg:assignment_step_2}
     \end{subfigure}\hfill
     \caption[Lloyd's algorithm demonstration.]{Lloyd algorithm demonstration. \cite{Wikikmeans}}
