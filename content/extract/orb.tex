@@ -32,6 +32,14 @@ from which we can obtain the key-point orientation
 \end{equation}
 where atan$2$ is the quadrant-aware version of arctan.
 
+An example of key-points and their orientation, found by OpenCV ORB implementation, can be seen in \figref{fig:orb_example}.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Figures/orb/orb_example.jpg}
+    \caption[ORB key-points and their orientation from an image of a cat]{ORB key-points and their orientation from an image of a cat.}
+    \label{fig:orb_example}
+\end{figure}
+
 As an ORB descriptor, a variation on the BRIEF descriptor is used. The BRIEF descriptor is a vector of binary values. This allows for fast matching using a Hamming distance.
 
 The descriptor values are computed by comparing random pairs of pixel intensities in a patch. The binary vector is based on the test defined as

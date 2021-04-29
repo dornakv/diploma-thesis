@@ -52,6 +52,14 @@ At first, we need to ensure the descriptor's invariance to rotation. For the key
 
 The wavelet responses are weighted with a Gaussian($\sigma = 2.5 s$) centered at the key-point. The weighted responses are represented as vectors in a space with the $x$ response being a vector along the $x$-axis, and the $y$ response being a vector along the $y$-axis. All the vectors within a sliding window of $\frac{\pi}{3}$ are summed and the longest of the vector is selected as the key-point orientation.
 
+An example of key-points and their orientation, found by OpenCV SURF implementation, can be seen in \figref{fig:surf_example}.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.50\textwidth]{Figures/surf/surf_example.jpg}
+    \caption[SURF key-points and their orientation from an image of a dog]{SURF key-points and their orientation from an image of a dog.}
+    \label{fig:surf_example}
+\end{figure}
+
 The descriptor is constructed from a square window the size of $20s$ around a key-point. The window is subsequently rotated along with the key-point orientation. Afterwards, this window is divided into $16$ ($4\times4$) square sub-windows. In each sub-window, the features are calculated using $5\times5$ regularly spaced sample points. From these sample points, we calculate the Haar wavelet responses in the horizontal and the vertical direction, where \say{horizontal} and \say{vertical} are defined in relation to the key-point orientation. The responses are weighted with a Gaussian ($\sigma = 3.3s$) centered at the key-point.
 
 Let us call the horizontal responses $d_x$ and the vertical responses $d_y$. Over each sub-window, we denote the sum of the responses $\sum d_x$ and $\sum d_y$, and the sum of absolute values of the responses $\sum |d_x|$ and $\sum |d_y|$. The behavior of these values for different image patterns can be seen in \figref{fig:surf_descriptor}. Combining $\sum d_x$, $\sum d_y$, $\sum |d_x|$, and $\sum |d_y|$ for each of the $16$ sub-window into a vector, we get a descriptor of length $64$.

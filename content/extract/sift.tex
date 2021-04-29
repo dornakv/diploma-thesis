@@ -1,7 +1,5 @@
 \section{Scale Invariant Feature Transform}
-Scale Invariant Feature Transform (SIFT) was proposed by David Lowe, and published in the original paper \cite{Lowe1999} in 1999.
-
-Compared to ordinary techniques such as the Harris Corner Detector \cite{Harris1988} or Canny edge detector \cite{Canny1986}, the SIFT identifies the general (not only edges and corners) key-points. The descriptors, which describe the local image region around the key-points are scale-invariant. Moreover, they are invariant to rotation, illumination, and change in affine transformations. In our text, we introduce the methodology of training the classifier that recognizes the objects in real images (photographs); therefore the properties of SIFT feature vector are essential.
+Scale Invariant Feature Transform (SIFT) was proposed by David Lowe, and published in the original paper \cite{Lowe1999} in 1999. Compared to ordinary techniques such as the Harris Corner Detector \cite{Harris1988} or Canny edge detector \cite{Canny1986}, the SIFT identifies the general (not only edges and corners) key-points. The descriptors, which describe the local image region around the key-points are scale-invariant. Moreover, they are invariant to rotation, illumination, and change in affine transformations. In our text, we introduce the methodology of training the classifier that recognizes the objects in real images (photographs); therefore the properties of SIFT feature vector are essential.
 
 \subsection{Key-point Detection}
 
@@ -107,6 +105,14 @@ and orientation
     \theta(x,y) = tan^{-1}\left(\frac{L(x,y+1)-L(x,y-1)}{L(x+1,y)-L(x-1,y)}\right),
 \end{equation}
 of each point within a region around the key-point. From these values, an orientation histogram with $36$ bins is created. The largest peak is selected as a key-point orientation. If there are other peaks more than $80\%$ of the largest peak, new key-points are created at the same location with the other peaks as their orientation.
+
+An example of key-points and their orientation, found by OpenCV SIFT implementation, can be seen in \figref{fig:sift_example}.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Figures/sift/sift_example.jpg}
+    \caption[SIFT key-points and their orientation from an image of a cat]{SIFT key-points and their orientation from an image of a cat.}
+    \label{fig:sift_example}
+\end{figure}
 
 The descriptor is constructed from a window of the size $16\times16$ pixels around the key-point. This window is rotated by the orientation of the key-point, which ensures the rotation invariance of the keypoint. In this window, the gradient magnitude and the orientation are computed for each point. The $16\times16$ window is divided into $16$ ($4\times4$) sub-windows. For each sub-window, an $8$ bin gradient orientation histogram, weighted by gradient magnitudes, is created. In \figref{fig:sift_descriptor}, we present the situation for a smaller ($8\times8$) window. These histograms form a descriptor vector.
 
