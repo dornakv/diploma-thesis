@@ -16,6 +16,7 @@
 \usepackage{subcaption}
 \usepackage{dirtytalk}
 \usepackage{microtype}
+\usepackage{multirow, makecell}
 \emergencystretch=1em
 \newcommand*\Laplace{\mathop{}\!\mathbin\bigtriangleup}
 \newcommand{\figref}[1]{\figurename~\ref{#1}}
@@ -23,6 +24,10 @@
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
+
+\usepackage{color, colortbl}
+\definecolor{LightCyan}{rgb}{0.82,1,1}
+\definecolor{Cyan}{rgb}{0.60,1,1}
 
 %% Next, enter data for leading pages
 \ThesisAuthor{Bc. Vojtěch Dorňák}
@@ -50,6 +55,8 @@ because without them this work would not have happened.}
 \AddAcronym{SURF}{Speed Up Robust Features}
 \AddAcronym{ORB}{Oriented Fast and Rotated Brief}
 \AddAcronym{SVM}{Support Vector Machine}
+\AddAcronym{PCA}{Principal Component Analysis}
+\AddAcronym{BoVW}{Bag of Visual Words}
 
 % Bibliography resources for BibLaTeX
 \addbibresource{main.bib}

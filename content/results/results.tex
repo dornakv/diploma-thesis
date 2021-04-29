@@ -1,7 +1,137 @@
 \chapter{Results}
-In this chapter, we take a look at the different results of our classification.
+In this chapter, we take a look at results of our classification. The whole pipeline is run on the Salomon supercomputer at IT4Innovations \cite{Salomon-WWW-17}. Each task was computed on a single compute node. Each compute node contains two 2.5 GHz, 12-core Intel Xeon E5-2680v3 (Haswell) processors and 128 GB of memory.
 
-\begin{table}
+\section{Tools}
+The data preparation and feature extraction of the Cats and Dogs dataset are done using the tools-iiit-pet from ml4py toolkit \cite{tools_iiit}. The tool for the data preparation and feature extraction of the other two datasets is strongly inspired by the tools-iiit-pet tool.
+
+For the local features extraction, we use the implementation of SIFT, SURF, and ORB from the OpenCV library \cite{opencv} and $k$-means implementation from the SciPy library \cite{scipy}. The BoVW is created in python.
+
+The global feature extractor, PCA, is implemented using PETSc \cite{petsc} and SLEPc \cite{slepc} libraries.
+
+The Bayesian Model classifier using the Jensen inequality is implemented in python. The Bayesian Model solved using the Spectral Projected Gradient method is trained using an Octave code provided by Ing. Lukáš Pospíšil, Ph.D., while the testing is done in python.
+
+For the SVM classification, we use the PermonSVM \cite{permonSVM}. This implementation of the SVM algorithm comes from the Department of Applied Mathematics, VSB-TUO, and the Institute of Geonics of the Czech Academy of Science in Ostrava, Czech Republic. It is build on top of a package for large scale quadratic programming, PermonQP. Both, PermonSVM and PermonQP, make use of the PETSc \cite{petsc} library.
+
+\section{2D Shapes Dataset Classification}
+In the 2D Shapes classification, we attempt to train and classify images of a circle, labeled as the positive data, and images of a star, labeled as the negative data.
+
+For local extractors, we attempt the classification of BoVW with dictionary sizes $2, 3, 4, 6, 8, 12, 16$.
+
+\subsection{SVM}
+\begin{table}[h!]
     \centering
-    \input{tables/table.csv}
+    \input{tables/four-shapes_svm_SIFT.tex}
+    \caption{2D Shapes results for extraction: SIFT and classification: SVM}
+    \label{tab:2d_SIFT_SVM}
 \end{table}
+In \tabref{tab:2d_SIFT_SVM} we can see the results of the classification by the SVM model on data extracted using SIFT. As the data is quite simple, the classifier has no problem classifying the data for any size of the BoVW dictionary. However, we can see, that both, the SVM-l1 and SVM-l2, converged much faster for larger sizes of the BoVW dictionary. Moreover, we recieved perfect score for accuracy, precission and $F_1$ from the BoVW sizes beyond the size of $6$.
+
+\begin{table}[h!]
+    \centering
+    \input{tables/four-shapes_svm_SURF.tex}
+    \caption{2D Shapes results for extraction: SURF and classification: SVM}
+    \label{tab:2d_SURF_SVM}
+\end{table}
+In \tabref{tab:2d_SURF_SVM} we can see the results of the classification by the SVM model on data extracted using SURF. Here, we can note, that for the size of BoVW dictionary $3$, the classification turned out poorly. This might have been due to poorly located centroids by the $k$-means algorithm. However, we can see that for other sizes of BoVW dictionary, we get satisfactory, while in many cases worse than in the case of extraction using SIFT, results.
+
+Compared to SIFT, the extraction of SURF features run much quicker. Even though the classification was in most cases slower, the time saved in extraction more than made up for it.
+
+\begin{table}[h!]
+    \centering
+    \input{tables/four-shapes_svm_ORB.tex}
+    \caption{2D Shapes results for extraction: ORB and classification: SVM}
+    \label{tab:2d_ORB_SVM}
+\end{table}
+In \tabref{tab:2d_ORB_SVM} we can see the results of the classification by the SVM model on data extracted using ORB. In this case, the the classification turned out better than in the case of SURF, while the time coplexity did not worsen by much.
+
+\subsection{Bayesian Model Classification}
+\begin{table}[ht!]
+    \centering
+    \input{tables/four-shapes_bayes_SIFT.tex}
+    \caption[2D Shapes results for SIFT extraction and Bayesian model classification]{2D Shapes results for SIFT extraction and Bayesian model classification. \say{Acc} stands for accuracy and \say{Prec} stands for precision.}
+    \label{tab:2d_SIFT_bayes}
+\end{table}
+In \tabref{tab:2d_ORB_SVM} we can see the results of the classification by the Bayesian model on data extracted using SIFT. In contrast with the classification using the SVM, we can see that the Bayesian model classifier has trouble classifying the data for smallest BoVW dictionary sizes. However, starting at the BoVW size $6$, we recieved perfect or near perfect score for accuracy, precision and $F_1$ with both models.
+
+Looking at the training duration, we can see the advantege of the analytical solution using Jensen inequality compared to the numerical solution using Spectral Projected Gradient method. This trend continues across the different extraction techniques.
+
+\begin{table}[ht!]
+    \centering
+    \input{tables/four-shapes_bayes_SURF.tex}
+    \caption[2D Shapes results for SURF extraction and Bayesian model classification]{2D Shapes results for SURF extraction and Bayesian model classification. \say{Acc} stands for accuracy and \say{Prec} stands for precision.}
+    \label{tab:2d_SURF_bayes}
+\end{table}
+In \tabref{tab:2d_ORB_SVM} we can see the results of the classification by the Bayesian model on data extracted using SURF. With SURF, the Bayesian model using Jensen inequality performed well for all sizes of the BoVW dictionary. However, the Bayesian model using Spectral Projected Gradient performed quite poorly with the BoVW dictionary size of $8$. We again suspect the reason to be poorly located centroids by the $k$-means algorithm.
+
+\begin{table}[ht!]
+    \centering
+    \input{tables/four-shapes_bayes_ORB.tex}
+    \caption[2D Shapes results for ORB extraction and Bayesian model classification]{2D Shapes results for ORB extraction and Bayesian model classification. \say{Acc} stands for accuracy and \say{Prec} stands for precision.}
+    \label{tab:2d_ORB_bayes}
+\end{table}
+In \tabref{tab:2d_ORB_SVM} we can see the results of the classification by the Bayesian model on data extracted using ORB. It performed much better than the classification of the extracted features using SIFT for the size $2$ of the BoVW dictionary. Moreover, we can got a perfect classification for all the other sizes of the BoVW dictionary.
+
+We conclude, that for simple 2D shapes, the best classification is achieved using the analytical solution of the Bayesian model on the data extracted using ORB, with the BoVW dictionary size $3$ or more.
+
+From the standpoint of time coplexity, the analytical solution of the Bayesian model shows clear advantage over the other methods. Moreover, as the SVM classifier was trained using parallelization on $24$ cores, while both Bayesian models were run in linear, the advantage is even more substentional.
+
+\section{3D Shapes Dataset Classification}
+In the 3D Shapes classification, we move on to more complex images. We attempt classify images of a box, labeled as the positive data, and images of a sphere, labeled as the negative data. This dataset has much less data than the other two (only $20$ images of each class).
+
+Same as with the 2D shapes, for local extractors, we attempt the classification of BoVW with dictionary sizes $2, 3, 4, 6, 8, 12, 16$.
+
+\subsection{SVM}
+\begin{table}[ht!]
+    \centering
+    \input{tables/3d_shapes_svm_SIFT.tex}
+    \caption{3D Shapes results for extraction: SIFT and classification: SVM}
+    \label{tab:3d_SIFT_SVM}
+\end{table}
+In \tabref{tab:3d_SIFT_SVM} we can see the results of the classification by the SVM model on data extracted using SIFT. We can see satisfactory results from classification of the BoVW with a dictionary size of $4$ and above. Compared to the 2D dataset, we need bigger dictionary size, which can be explained by the increase in comlpexity of the data.
+
+\begin{table}[ht!]
+    \centering
+    \input{tables/3d_shapes_svm_SURF.tex}
+    \caption{3D Shapes results for extraction: SURF and classification: SVM}
+    \label{tab:3d_SURF_SVM}
+\end{table}
+In \tabref{tab:3d_SURF_SVM} we can see the results of the classification by the SVM model on data extracted using SURF. Here, both the $l1$-loss and the $l2$-loss SVM classifiers have trouble classifying the data for the size of BoVW dictionary smaller than $6$. The \say{nan} of $F_1$ score for the size of BoVW $2$ are due to none of the positive data (boxes) being classified as such.
+
+\begin{table}[ht!]
+    \centering
+    \input{tables/3d_shapes_svm_ORB.tex}
+    \caption{3D Shapes results for extraction: ORB and classification: SVM}
+    \label{tab:3d_ORB_SVM}
+\end{table}
+In \tabref{tab:3d_ORB_SVM} we can see the results of the classification by the SVM model on data extracted using ORB. Here, we can see even worse results than classifying the data extracted using SURF, as the classifiers struggless with BoVW sizes smaller than $8$.
+
+For both, the SURF and ORB extracted data classification, the time complexity improvement is not worth the worse classification score.
+
+\subsection{Bayesian Model Classificatin}
+\begin{table}[ht!]
+    \centering
+    \input{tables/3d_shapes_bayes_SIFT.tex}
+    \caption[3D Shapes results for SIFT extraction and Bayesian model classification]{3D Shapes results for SIFT extraction and Bayesian model classification. \say{Acc} stands for accuracy and \say{Prec} stands for precision.}
+    \label{tab:3d_SIFT_bayes}
+\end{table}
+In \tabref{tab:3d_SIFT_bayes} we can see the results of the classification by the Bayesian model on data extracted using SIFT. We can see, similar to classification using SVM, that for the BoVW size of $4$ or more, the Bayesian classifier using Jensen inequality gives perfect results. However, the classifier using Spectral Projected Gradient method does not classify well for the BoVW of the size $6$.
+
+\begin{table}[ht!]
+    \centering
+    \input{tables/3d_shapes_bayes_SURF.tex}
+    \caption[3D Shapes results for SURF extraction and Bayesian model classification]{3D Shapes results for SURF extraction and Bayesian model classification. \say{Acc} stands for accuracy and \say{Prec} stands for precision.}
+    \label{tab:3d_SURF_bayes}
+\end{table}
+\begin{table}[ht!]
+    \centering
+    \input{tables/3d_shapes_bayes_ORB.tex}
+    \caption[3D Shapes results for ORB extraction and Bayesian model classification]{3D Shapes results for ORB extraction and Bayesian model classification. \say{Acc} stands for accuracy and \say{Prec} stands for precision.}
+    \label{tab:3d_ORB_bayes}
+\end{table}
+In \tabref{tab:3d_SURF_bayes} and \tabref{tab:3d_ORB_bayes} we can see the results of the classification by the Bayesian model on data extracted using SURF and ORB respectively. Similar to the classification using SVM, we can see that the Bayes classifier struggles with the classification until larger sizes of BoVW.
+
+On the 3D Shapes dataset, we can see an advantage of classifying data extracted using the SIFT extractor. While the SIFT extractor is slower than the SURF and the ORB extractors, the performance of the classification model is much better.
+
+\section{Cats and Dogs Dataset Classification}
+In the Cats and Dogs classification, we attempt to classify images of real photographs. The complexity of the data is much bigger than the previous two datasets. To concentrate only on classification using the data relevant to the animal, we classify images of cutouts of the animals as described in \ref{sec:cat_dog_dataset}.
+

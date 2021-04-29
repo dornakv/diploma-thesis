@@ -1,16 +1,16 @@
 \section{Bayesian Model}
 This classifier is suitable for classifying data represented by a stochastic vector. The BoVW data can be easily transformed into a such vector. Instead of each component of the BoVW vector representing the number of key-points in the respective category, the component in our new vector represents the probability of key-points belonging to the respective category.
 
-Let us denote the stochastic data vector $\Pi_{xt} \in \mathbb{R}^{K_x}, t=1,\dots,T$, where $T$ is the number of samples. Let the vector $\Pi{yt}\in \mathbb{R}^{K_y}$ be a vector of probabilities, with which $\Pi{xt}$ belongs to each category, and $K_y$ the number of categories.
+Let us denote the stochastic data vector $\Pi_{xt} \in \mathbb{R}^{K_x}, t=1,\dots,T$, where $T$ is the number of samples and $K_x$ is the size of BoVW. Let the vector $\Pi_{yt}\in \mathbb{R}^{K_y}$ be a vector of probabilities, with which $\Pi_{xt}$ belongs to each category, and $K_y$ the number of categories.
 
 Given a stochastic data vector $\Pi_x$, we can describe the transformation $\mathbb{R}^{K_x} \rightarrow \mathbb{R}^{K_y}$ using a matrix $\Delta \in \mathbb{R}^{K_y, K_x}$:
 \begin{equation}
     \Delta =
     \begin{bmatrix}
-        P(\Pi_y^1 | \Pi_x^1) & P(\Pi_y^1 | \Pi_x^2) & \dots & P(\Pi_y^1 | \Pi_x^{K_x})\\
-        P(\Pi_y^2 | \Pi_x^1) & P(\Pi_y^2 | \Pi_x^2) & \dots & P(\Pi_y^2 | \Pi_x^{K_x})\\
+        P(y_t = y_1 | x_t = x_1) & P(y_t = y_1 | x_t = x_2) & \dots & P(y_t = y_1 | x_t = x_{K_x})\\
+        P(y_t = y_2 | x_t = x_1) & P(y_t = y_2 | x_t = x_2) & \dots & P(y_t = y_2 | x_t = x_{K_x})\\
         \vdots & \ddots\\
-        P(\Pi_y^{K_y} | \Pi_x^1) & P(\Pi_y^{K_y} | \Pi_x^2) & \dots & P(\Pi_y^{K_y} | \Pi_x^{K_x})
+        P(y_t = y_{K_y} | x_t = x_1) & P(y_t = y_{K_y} | x_t = x_2) & \dots & P(y_t = y_{K_y} | x_t = x_{K_x})\\
     \end{bmatrix},
 \end{equation}
 where $\Pi_x^n$ is the $n$-th element of $\Pi_x$, similar to $\Pi_y^n$, and the matrix $\Delta$ is a left stochastic matrix.
@@ -27,7 +27,7 @@ For the optimization, the term $\ln \Pi_{yt}^i$ is constant, therefore it can be
 \begin{equation}
     \text{dist}(\Pi_{yt}, \Delta\Pi_{xt}) \propto - \sum_{i=1}^{K_y} \Pi_{yt}^i \ln (\Delta\Pi_{xt})_i.
 \end{equation}
-This problem is hard to minimize analytically. However, $\Delta\Pi_{xt}$ is a convex function, and therefore $-\ln(\Delta\Pi_{xt})$ is a convex function. Thus Jensen's inequality can be used:
+This problem is hard to minimize analytically. However, $\Delta\Pi_{xt}$ is a convex combination, and therefore $-\ln(\Delta\Pi_{xt})$ is a convex function. Thus Jensen's inequality can be used:
 \begin{equation}
     - \sum_{i=1}^{K_y} \Pi_{yt}^i \ln (\Delta\Pi_{xt})_i \leq - \sum_{i=1}^{K_y} \Pi_{yt}^i ( \sum_{j=1}^{K_x} \Pi_{xt}^j \ln (\Delta_{ij}) ) = - \sum_{i=1}^{K_y} \sum_{j=1}^{K_x} \Pi_{yt}^i \Pi_{xt}^j \ln \Delta_{ij}.
 \end{equation}
@@ -37,9 +37,9 @@ From this, we get an optimization problem
 \end{equation}
 where
 \begin{equation}
-    \Omega_{Delta} = \{ \Delta \in [0, 1], \forall j \in \{ 1, 2, \dots, K_x \} : \sum_{i=1}^{K_y} \Delta_{ij} = 1 \},
+    \Omega_{\Delta} = \{ \Delta \in [0, 1], \forall j \in \{ 1, 2, \dots, K_x \} : \sum_{i=1}^{K_y} \Delta_{ij} = 1 \},
 \end{equation}
-which can be solved analytically.
+which is a feasible set of left stochastic matrices. The problem can be solved analytically.
 
 Let $\Delta$ be the optimal stochastic matrix. There exist $\lambda_j \in \mathbb{R}^{K_x}$ such that
 \begin{equation}
@@ -52,10 +52,10 @@ is the Lagrange function. The Karush-Kuhn Tucker conditions are
 \end{equation}
 and
 \begin{equation}
-    \nabla_{\Delta_{\hat{j}}} = \sum_{i=1}^{K_y} \Delta_{i\hat{j}} - 1 = 0.
+    \nabla_{\Delta_{\hat{j}}} L = \sum_{i=1}^{K_y} \Delta_{i\hat{j}} - 1 = 0.
     \label{eq:bayes_second_kkt}
 \end{equation}
-From \eqref{eq:bayes_first_kkt} and \eqref{eq:bayes_second_kkt}, we get the optimal $\Delta_{\hat{i}\hat{j}}^*$
+From \eqref{eq:bayes_first_kkt} and \eqref{eq:bayes_second_kkt}, we get the optimal $\Delta^*$ with components
 \begin{equation}
     \Delta_{\hat{i}\hat{j}}^{*} = \frac{\sum_{t=1}^{T} \Pi_{yt}^{\hat{i}} \Pi_{xt}^{\hat{j}}}{\sum_{i=1}^{K_y} \sum_{t=1}^{T} \Pi_{yt}^{i} \Pi_{xt}^{\hat{j}},}.
 \end{equation}
@@ -64,7 +64,6 @@ Another approach to finding the optimal $\Delta^{*}$ is optimizing the problem
 \begin{equation}
     \Delta^* = \argmin_{\Delta \in \Omega_{\Delta}} - \sum_{t=1}^T \sum_{i=1}^{K_y} \Pi_{yt}^i \ln (\Delta\Pi_{xt})_i,
 \end{equation}
-without using the Jensen inequality.
-As $-\ln(\Delta\Pi_{xt})$ is a convex function, the problem can be solved numerically using the Spectral Projected Gradient method\cite{birgin2000}.
+without using the Jensen inequality. Since the feasible set $\Omega_{\Delta}$ is a closed convex set, the problem can be solved numerically using the Spectral Projected Gradient method\cite{birgin2000}.
 
 We use both approaches (the analytical solution using Jensen inequality and the numerical solution) in our experiments.

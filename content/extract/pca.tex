@@ -1,16 +1,16 @@
 \section{Principal Component Analysis}
-Principal Component Analysis (PCA) is a global feature extractor. It is used to reduce the dimension of data while preserving as much of the data variance as possible.
+Principal Component Analysis (PCA) is a global feature extractor based on the data spectral properties \cite{pearson1901}. It is used to reduce the dimension of data while preserving as much of the data variance as possible.
 
-Let $x_t \in \mathbb{R}^n$ be a data point, where $t=1,\dots,T$ and $T$ is the number of data points. We want to project $x_t$ into a $y_t \in \mathbb{R}^k$, where $k < n$. We want to find the optimal parameters $P$ of the parametric reduction mapping $\psi_P: \mathbb{R}^n \rightarrow \mathbb{R}^k$ and the parametric reconstruction mapping $\psi_P^{-1}: \mathbb{R}^k \rightarrow \mathbb{R}^n$. The optimal parameters $P^{*}$ minimize the reconstruction error, i.e.,
+Let $x_t \in \mathbb{R}^n$ be a data point, where $t=1,\dots,T$ and $T$ is the number of data points. The aim of the analysis is the determination of the optimal projector, which projects $x_t$ onto $y_t \in \mathbb{R}^k$, where $k < n$. We want to find the optimal parameters $P$ of the parametric reduction mapping $\psi_P: \mathbb{R}^n \rightarrow \mathbb{R}^k$ and the parametric reconstruction mapping $\psi_P^{-1}: \mathbb{R}^k \rightarrow \mathbb{R}^n$. The optimal parameters $P^{*}$ minimize the reconstruction error, i.e.,
 \begin{equation}
     P^{*} \coloneqq \argmin_{P \in \rho} \sum_{t=1}^T \norm{x_t - \psi_P^{-1}(\psi_P(x_t))},
     \label{eq:mapping_optimization}
 \end{equation}
 where $\psi$ denotes the set of feasible parameters and $\norm{x_t - \psi_P^{-1}(\psi_P(x_t))}$ is the reconstruction error of a data-point.
 
-PCA uses the mappings
+PCA uses the linear mappings
 \begin{equation}
-    \psi_{[Q,b]}^{-1}(y) \coloneqq Qy+b, \psi_{[Q,b]}(x) \coloneqq Q^{\top}(x-b),
+    \psi_{[Q,b]}^{-1}(y) \coloneqq Qy+b,\quad \psi_{[Q,b]}(x) \coloneqq Q^{\top}(x-b),
     \label{eq:pca_mappings}
 \end{equation}
 with parameters $b \in \mathbb{R}^n$ and $Q \in \mathbb{R}^{n,k}$ with orthonormal columns, i.e.,
@@ -21,15 +21,15 @@ with parameters $b \in \mathbb{R}^n$ and $Q \in \mathbb{R}^{n,k}$ with orthonorm
 
 Substituting \eqref{eq:pca_mappings}, \eqref{eq:pca_identity} into the optimization problem \eqref{eq:mapping_optimization} and using the square Euclidean norm for measuring the reconstruction error, we get the optimization problem
 \begin{equation}
-    [Q^{*}, b^{*}] \coloneqq \argmin_{Q,b} \sum_{t=1}^T \norm{x_t - (QQ^{\top}(x_t-b) + b)}^2_2 \text{s.t.} Q^{\top}Q=I.
+    [Q^{*}, b^{*}] \coloneqq \argmin_{Q,b} \sum_{t=1}^T \norm{x_t - (QQ^{\top}(x_t-b) + b)}^2_2\quad \text{s.t.} Q^{\top}Q=I.
     \label{eq:pca_optimization}
 \end{equation}
-The objective function $f(Q,b)$ of \eqref{eq:pca_optimization} can be rewritten to the form
+The objective function $f(Q,b)$ of \eqref{eq:pca_optimization} can be rewritten in the form
 \begin{equation}
     f(Q,b)=\sum_{t=1}^T (x_t^{\top}x_t - 2 x_t^{\top}b + b^{\top}b - x_t^{\top}QQ^{\top}x_t + 2x_t^{\top}QQ^{\top}b - b^{\top}QQ^{\top}b),
     \label{eq:pca_obj_fun}
 \end{equation}
-and the optimality condition of $b^{*}$ can be formulated as
+and the optimality condition of the unconstrained variable $b^{*}$ can be formulated as
 \begin{equation}
     \nabla_bf(Q,b) = \sum_{t=1}^T(-2x_t+2b+2QQ^{\top}xt-2QQ^{\top}b)=0,
 \end{equation}
@@ -38,7 +38,7 @@ which is equivalent to
     (I-QQ^{\top})\sum_{t=1}^T(b-x_t)=0.
     \label{eq:pca_opt_b}
 \end{equation}
-As $k<n$, $Q \in \mathbb{R}^{n,k}$ is not a full column rank and $QQ^{\top} \neq = I$. The unique solution of \eqref{eq:pca_opt_b} is
+As $k<n$, $Q \in \mathbb{R}^{n,k}$ is not a full column rank and $QQ^{\top} \neq I$. The unique solution of \eqref{eq:pca_opt_b} is
 \begin{equation}
     b^{*} = \frac{1}{T}\sum_{t=1}^T x_t.
 \end{equation}
@@ -67,7 +67,7 @@ where cov($x$) is the covariance matrix of $x$ defined as
 \begin{equation}
     \text{cov}(x) \coloneqq \sum_{t=1}^T(x_t-b^*)(x_t-b^*)^{\top} = \sum_{t=1}^T\hat{x_t}\hat{x_t}^{\top}.
 \end{equation}
-The argument of the minimum is independent of constants in the objective function. Therefore, we can reformulate the optimization problem \eqref{eq:pca_optimization} (in terms of variable $Q$) as
+The argument of the minimum is independent of additive constants in the objective function. Therefore, we can reformulate the optimization problem \eqref{eq:pca_optimization} (in terms of variable $Q$) as
 \begin{equation}
     \begin{split}
         [Q^*] &= \argmin_{Q^{\top}Q=I} f(Q,b^*) = \argmin_{Q^{\top}Q=I} -\text{trace}(Q^{\top}\text{cov}(x)Q) \\&= \argmax_{Q^{\top}Q=I} \text{trace}(Q^{\top}\text{cov}(x)Q) \\&= \argmax_{\forall j:q_j^{\top}q_j=1} \sum_{j=1}^k q_j^{\top} \text{cov}(x) q_j,
@@ -91,4 +91,4 @@ If we substitute \eqref{eq:pca_eig} into objective function \eqref{eq:pca_optimi
 \begin{equation}
     \sum_{j=1}^k q_j^{\top} \text{cov}(x)q_j = \sum_{j=1}^k \lambda_j q_j^{\top}q_j = \sum_{j=1}^k \lambda_j.
 \end{equation}
-As the problem \eqref{eq:pca_optimization_final} is a maximization problem, the optimal $Q^*$ consists of (orthonormal) eigenvectors which correspond to the $k$ largest eigenvalues.
+Since the problem \eqref{eq:pca_optimization_final} is a maximization problem, the optimal $Q^*$ consists of (orthonormal) eigenvectors which correspond to the $k$ largest eigenvalues.

@@ -10,7 +10,7 @@ Let us consider an input image \( I_{img}(x,y) \). A convolution of the image wi
     G(x,y,\sigma) = \frac{1}{2\pi\sigma^2}e^{-\frac{x^2+y^2}{2\sigma^2}},
     \label{eq:Gaussian_kernel}
 \end{equation}
-at a scale \( \sigma \) is exploited to get a scale-space representation of the image so that:
+at a scale \( \sigma > 0 \) is exploited to get a scale-space representation of the image so that:
 \begin{equation}
     L(x, y,\sigma) =  G(x,y,\sigma)*I_{img}(x,y).
 \end{equation}
@@ -19,30 +19,30 @@ To detect scale-invariant key-points, a scale normalized Laplacian of Gaussian (
 \begin{equation}
     \Laplace_{norm} L(x, y, \sigma) = \sigma\left(\frac{\partial^2 L(x,y,\sigma)}{\partial x^2} + \frac{\partial^2 L(x,y,\sigma)}{\partial y^2}\right)
 \end{equation}
-is required\cite{Koenderink1984}. It has been shown\cite{Mikolajczyk2002}, that the local extrema of LoG provide the most stable image features, compared to many other popular image functions.
+is required \cite{Koenderink1984}. It has been shown \cite{Mikolajczyk2002}, that the local extrema of LoG provide the most stable image features, compared to many other popular image functions.
 
-Determination of the LoG would be time-consuming, therefore, it is approximated by the Difference of Gaussian (DoG)\cite{Lowe2004}. The DoG is computed from two adjacent scales separated by a constant multiplicative factor $k \in \mathbb{R}$:
+Determination of the LoG would be time-consuming, therefore, it is approximated by the Difference of Gaussian (DoG) \cite{Lowe2004}. The DoG is computed from two adjacent scales separated by a constant multiplicative factor $k \in \mathbb{R}$:
 \begin{equation}
     D(x,y,\sigma) := L(x,y,k\sigma) - L(x,y,\sigma).
 \end{equation}
 
-To ensure scale invariance, the extrema are located not only in the domain of one DoG, however, it is found across different scales as well. The different DoGs at the scales are created by progressively convolving the original image with the Gaussian kernel. The consecutive Gaussian kernels' scale differs by the multiplicative factor $k$.
+To ensure the scale invariance, the extrema are located not only in the domain of one DoG, however, it is found across different scales as well. The different DoGs at the scales are constructed by progressively convolving the original image with the Gaussian kernel. The consecutive Gaussian kernels' scale differs by the multiplicative factor $k$.
 
-At each doubling of the scale $k$, the resolution of an image can be reduced by a factor of $2$ for efficiency. Each group of blurred images of the same resolution is called an octave. In each octave, we generate the DoG by subtracting the $L(x, y, \sigma)$ of neighboring scales. This is called the DoG pyramid and can be seen in \figref{fig:DoG_pyramid}.
+At each doubling of the scale $k$, the resolution of an image can be reduced by a factor of $2$ to provide better efficiency. Each group of blurred images of the same resolution is called an octave. In each octave, we generate the DoG by subtracting the $L(x, y, \sigma)$ of neighboring scales. This is called the DoG pyramid and can be seen in \figref{fig:DoG_pyramid}.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{Figures/sift/pyramid.jpg}
-    \caption[DoG pyramid.]{DoG pyramid. \cite{Lowe2004}}
+    \caption[DoG pyramid]{DoG pyramid \cite{Lowe2004}.}
     \label{fig:DoG_pyramid}
 \end{figure}
 
-Each pixel in the DoG pyramid is compared to the $3\times3$ pixels in DoGs below and above, and the $8$ surrounding pixels. This is shown in \figref{fig:DoG_extrema}. The pixel is selected as a key-point candidate if it has a lower or a higher value than all of these $26$ pixels.
+Each pixel in the DoG pyramid is compared to the $3\times3$ pixels in DoGs below and above, and $8$ surrounding pixels. This is shown in \figref{fig:DoG_extrema}. The pixel is selected as a key-point candidate if it has a lower or a higher value than all of these $26$ pixels.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.4\textwidth]{Figures/sift/extrema.jpg}
-    \caption[Optima of the DoG are selected by the means of comparing pixel to the 26 pixels surrounding it in the scale-space.]{Optima of the DoG are selected by the means of comparing pixel to the 26 pixels surrounding it in the scale-space. \cite{Lowe2004}}
+    \caption[Optima of the DoG are selected by the means of comparing pixel to the 26 pixels surrounding it in the scale-space]{Optima of the DoG are selected by the means of comparing pixel to the 26 pixels surrounding it in the scale-space \cite{Lowe2004}.}
     \label{fig:DoG_extrema}
 \end{figure}
 
@@ -58,7 +58,7 @@ where \( D(x,y,\sigma) \) and the partial derivatives are evaluated at the key-p
 \end{equation}
 If the offset \( \hat{\boldsymbol{x}} \) is larger than \( 0.5 \) in any dimension, it indicates that the extremum is closer to another point. In this case, the candidate point is changed to the new point, and interpolation is performed again.
 
-The function value at the sub-pixel extrema ,$D(\hat{\boldsymbol{x}})$, is used for rejecting extrema with low contrast. In our experiments, we use the OpenCV SIFT implementation default value $\frac{0.04}{3}$\cite{openCV}.
+The function value at the sub-pixel extrema ,$D(\hat{\boldsymbol{x}})$, is used for rejecting extrema with low contrast. In our experiments, we use the OpenCV SIFT implementation, where the default value is $\frac{0.04}{3}$ \cite{openCV}.
 
 The DoG has a strong response along edges, even if the location along the edge is poorly determined. These candidate key-points have principal curvature perpendicular to the edge much larger than the principal curvature along it. The principal curvatures can be computed from a $2\times2$ Hessian matrix at the location of the key-point candidate
 \begin{equation}
@@ -93,12 +93,12 @@ Therefore, to inspect the ratio of eigenvalues, we can check
 \begin{equation}
     \frac{Tr(H)^2}{Det(\boldsymbol{H})} = \frac{(\alpha+\beta)^2}{\alpha\beta}=\frac{(r\beta+\beta)^2}{r\beta^2} = \frac{(r+1)^2}{r}.
 \end{equation}
-The candidate key-points with this ratio below a threshold $r$ is discarded. In our experiments, we use the default value of OpenCV SIFT implementation: $10$.
+The candidate key-points with this ratio below a threshold $r$ is discarded. In our experiments, we use the default value of OpenCV SIFT implementation, which is equal to $10$.
 
 \subsection{Key-point Description}
 We want to create a descriptor for each of our key-points. These descriptors must be almost identical across different scales, rotations, illuminations, and other transformations.
 
-To ensure descriptor invariance to a rotation, we first determine the key-point orientation. First, we calculate the gradient magnitude
+To ensure descriptor invariance to a rotation, we first determine the key-point orientation. We calculate the gradient magnitude
 \begin{equation}
     m(x,y) = \sqrt{(L(x+1,y)-L(x-1,y))^2+(L(x,y+1)-L(x,y-1))^2},
 \end{equation}
@@ -106,13 +106,13 @@ and orientation
 \begin{equation}
     \theta(x,y) = tan^{-1}\left(\frac{L(x,y+1)-L(x,y-1)}{L(x+1,y)-L(x-1,y)}\right),
 \end{equation}
-of each point within a region around the key-point. From these, an orientation histogram with $36$ bins is created. The largest peak is selected as a key-point orientation. If there are other peaks more than $80\%$ of the largest peak, new key-points are created at the same location with the other peaks as their orientation.
+of each point within a region around the key-point. From these values, an orientation histogram with $36$ bins is created. The largest peak is selected as a key-point orientation. If there are other peaks more than $80\%$ of the largest peak, new key-points are created at the same location with the other peaks as their orientation.
 
-For the descriptor, a window, $16\times16$ pixels around the key-point, rotated by the orientation of the key-point, is used. In this window, the gradient magnitude and the orientation are computed for each point. The $16\times16$ window is divided into $16$ ($4\times4$) sub-windows. For each sub-window, an $8$ bin gradient orientation histogram, weighted by gradient magnitudes, is created. This can be seen for a smaller $8\times8$ window in \figref{fig:sift_descriptor}. These histograms then form a descriptor vector.
+The descriptor is constructed from a window of the size $16\times16$ pixels around the key-point. This window is rotated by the orientation of the key-point, which ensures the rotation invariance of the keypoint. In this window, the gradient magnitude and the orientation are computed for each point. The $16\times16$ window is divided into $16$ ($4\times4$) sub-windows. For each sub-window, an $8$ bin gradient orientation histogram, weighted by gradient magnitudes, is created. In \figref{fig:sift_descriptor}, we present the situation for a smaller ($8\times8$) window. These histograms form a descriptor vector.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{Figures/sift/descriptor.jpg}
-    \caption[Extracting the sift-descriptor.]{Building of the sift-descriptor. \cite{Lowe2004}}
+    \caption[Extracting the sift-descriptor.]{Building of the sift-descriptor \cite{Lowe2004}.}
     \label{fig:sift_descriptor}
 \end{figure}

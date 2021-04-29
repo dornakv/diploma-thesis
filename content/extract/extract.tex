@@ -1,14 +1,14 @@
 \chapter{Image Data Transformation}
 
-We can attempt to classify the raw image data where the image is represented as a vector of light intensities at each pixel. However, it might be beneficial to transform the image data into a feature space using a feature extraction technique. The feature extraction techniques can be split into two categories: local feature extractors and global feature extractors\cite{lee2005}.
+Today, recording of visual signals in the form of photographs is common. As the resolution, and therefore the storage requirement grows, it is not practical to process such data raw. Moreover, while processing such data, we come across the problem of \say{small data}, where the number of the feature dimension is significantly higher than the number of observations. Therefore it might be beneficial to transform the image data into a feature space using a feature extraction technique. The feature extraction techniques can be split into two categories: local feature extractors and global feature extractors\cite{lee2005}.
 
-Local feature extractors localize such points in an image, which could be found regardless of the image subject position. These points are called key-points. The area around such key-points is then described using a vector called a descriptor. The descriptors are created in a way, which allows for matching similar features.
+Local feature extractors localize such points in an image, which could be found regardless of the position of the subject in the image. These points are called key-points. The area around such key-points is described using a vector called a descriptor. The descriptors are created in a way, which allows for matching similar features.
 
-Global feature extractors transform the whole image into a lower-dimensional vector, attempting to retain the most important information.
+Global feature extractors transform the whole image into a lower-dimensional vector, attempting to retain the most important information. The remaining information in the image is considered to be a noise, which should not have any effect on the classification of the image. Therefore it can be ignored.
 
-For feature extraction, we compare three local feature extractors: SIFT, SURF and ORB, and a global feature extractor: PCA.
+In this thesis, we compare three local feature extractors: SIFT, SURF and ORB, and a global feature extractor: PCA.
 
-In this section, we describe the four feature extraction algorithms.
+In this section, we describe these four feature extraction algorithms.
 
 \input{content/extract/sift}
 
