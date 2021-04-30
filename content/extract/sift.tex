@@ -1,5 +1,5 @@
 \section{Scale Invariant Feature Transform}
-Scale Invariant Feature Transform (SIFT) was proposed by David Lowe, and published in the original paper \cite{Lowe1999} in 1999. Compared to ordinary techniques such as the Harris Corner Detector \cite{Harris1988} or Canny edge detector \cite{Canny1986}, the SIFT identifies the general (not only edges and corners) key-points. The descriptors, which describe the local image region around the key-points are scale-invariant. Moreover, they are invariant to rotation, illumination, and change in affine transformations. In our text, we introduce the methodology of training the classifier that recognizes the objects in real images (photographs); therefore the properties of SIFT feature vector are essential.
+Scale Invariant Feature Transform (SIFT) was proposed by David Lowe, and published in the original paper \cite{Lowe1999} in 1999. Compared to ordinary techniques such as the Harris Corner Detector \cite{Harris1988} or Canny edge detector \cite{Canny1986}, the SIFT identifies the general (not only edges and corners) key-points. The descriptors, which describe the local image region around the key-points are scale-invariant. Moreover, they are invariant to rotation, illumination, and change in affine transformations. In the text, we introduce the methodology of training the classifier that recognizes the objects in real images (photographs); therefore the properties of SIFT feature vector are essential.
 
 \subsection{Key-point Detection}
 
@@ -24,11 +24,11 @@ Determination of the LoG would be time-consuming, therefore, it is approximated 
     D(x,y,\sigma) := L(x,y,k\sigma) - L(x,y,\sigma).
 \end{equation}
 
-To ensure the scale invariance, the extrema are located not only in the domain of one DoG, however, it is found across different scales as well. The different DoGs at the scales are constructed by progressively convolving the original image with the Gaussian kernel. The consecutive Gaussian kernels' scale differs by the multiplicative factor $k$.
+To ensure the scale invariance, the extrema are located not only in the domain of one DoG, but it is found across different scales as well. The different DoGs at the scales are constructed by progressively convolving the original image with the Gaussian kernel. The scale of consecutive the consecutive Gaussian kernel differs by the multiplicative factor $k$.
 
 At each doubling of the scale $k$, the resolution of an image can be reduced by a factor of $2$ to provide better efficiency. Each group of blurred images of the same resolution is called an octave. In each octave, we generate the DoG by subtracting the $L(x, y, \sigma)$ of neighboring scales. This is called the DoG pyramid and can be seen in \figref{fig:DoG_pyramid}.
 
-\begin{figure}
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=0.8\textwidth]{Figures/sift/pyramid.jpg}
     \caption[DoG pyramid]{DoG pyramid \cite{Lowe2004}.}
@@ -37,7 +37,7 @@ At each doubling of the scale $k$, the resolution of an image can be reduced by 
 
 Each pixel in the DoG pyramid is compared to the $3\times3$ pixels in DoGs below and above, and $8$ surrounding pixels. This is shown in \figref{fig:DoG_extrema}. The pixel is selected as a key-point candidate if it has a lower or a higher value than all of these $26$ pixels.
 
-\begin{figure}
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=0.4\textwidth]{Figures/sift/extrema.jpg}
     \caption[Optima of the DoG are selected by the means of comparing pixel to the 26 pixels surrounding it in the scale-space]{Optima of the DoG are selected by the means of comparing pixel to the 26 pixels surrounding it in the scale-space \cite{Lowe2004}.}
@@ -49,7 +49,7 @@ To detect sub-pixel locations of extrema, the DoG is interpolated using quadrati
     D(\boldsymbol{x}) = D + \frac{\partial D^T}{\partial \boldsymbol{x}}\boldsymbol{x}+\frac{1}{2}\boldsymbol{x}^T\frac{\partial^2 D}{\partial \boldsymbol{x}^2}\boldsymbol{x},
     \label{eq:taylor_expansion}
 \end{equation}
-where \( D(x,y,\sigma) \) and the partial derivatives are evaluated at the key-point and \( \boldsymbol{x}=(x,y,\sigma) \) is the offset from the key-point. Then, extremum \( \hat{\boldsymbol{x}} \) is located by setting the gradient of \( D \) to be a zero vector:
+where \( D(x,y,\sigma) \) and the partial derivatives are evaluated at the key-point and \( \boldsymbol{x}=(x,y,\sigma) \) is the offset from the key-point. Afterwords, extremum \( \hat{\boldsymbol{x}} \) is located by setting the gradient of \( D \) to be a zero vector:
 \begin{equation}
     \hat{\boldsymbol{x}} = - \frac{\partial^2 D^{-1}}{\partial \boldsymbol{x}^2}\frac{\partial D}{\partial \boldsymbol{x}}.
     \label{eq:taylor_extremum}
@@ -87,7 +87,7 @@ Then,
     \frac{Tr(H)^2}{Det(\boldsymbol{H})} = \frac{(\alpha+\beta)^2}{\alpha\beta}=\frac{(r\beta+\beta)^2}{r\beta^2} = \frac{(r+1)^2}{r}.
 \end{equation}
 
-Therefore, to inspect the ratio of eigenvalues, we can check
+Therefore, to inspect the ratio of eigenvalues, we can check the value of
 \begin{equation}
     \frac{Tr(H)^2}{Det(\boldsymbol{H})} = \frac{(\alpha+\beta)^2}{\alpha\beta}=\frac{(r\beta+\beta)^2}{r\beta^2} = \frac{(r+1)^2}{r}.
 \end{equation}
@@ -109,16 +109,16 @@ of each point within a region around the key-point. From these values, an orient
 An example of key-points and their orientation, found by OpenCV SIFT implementation, can be seen in \figref{fig:sift_example}.
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.55\textwidth]{Figures/sift/sift_example.jpg}
+    \includegraphics[width=0.65\textwidth]{Figures/sift/sift_example.jpg}
     \caption[SIFT key-points and their orientation from an image of a cat]{SIFT key-points and their orientation from an image of a cat.}
     \label{fig:sift_example}
 \end{figure}
 
-The descriptor is constructed from a window of the size $16\times16$ pixels around the key-point. This window is rotated by the orientation of the key-point, which ensures the rotation invariance of the keypoint. In this window, the gradient magnitude and the orientation are computed for each point. The $16\times16$ window is divided into $16$ ($4\times4$) sub-windows. For each sub-window, an $8$ bin gradient orientation histogram, weighted by gradient magnitudes, is created. In \figref{fig:sift_descriptor}, we present the situation for a smaller ($8\times8$) window. These histograms form a descriptor vector.
+The descriptor is constructed from a window of the size $16\times16$ pixels around the key-point. This window is rotated by the orientation of the key-point, which ensures the rotation invariance of the key-point. In this window, the gradient magnitude and the orientation are computed for each point. The $16\times16$ window is divided into $16$ ($4\times4$) sub-windows. For each sub-window, an $8$ bin gradient orientation histogram, weighted by gradient magnitudes, is created. In \figref{fig:sift_descriptor}, we present the situation for a smaller ($8\times8$) window. These histograms form a descriptor vector.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{Figures/sift/descriptor.jpg}
-    \caption[Extracting the sift-descriptor.]{Building of the sift-descriptor \cite{Lowe2004}.}
+    \caption[Extracting the sift-descriptor.]{Building of the SIFT-descriptor \cite{Lowe2004}.}
     \label{fig:sift_descriptor}
 \end{figure}

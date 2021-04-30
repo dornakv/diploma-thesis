@@ -10,7 +10,7 @@ Let $n\in\mathbb{N}$ and the threshold $t\in\mathbb{R}^{+}$ be given. Let $S$ be
 
 The selected corners, i.e., key-points are then ordered according to a Harris corner measure \cite{Harris1988}. For $N$ key-points, the threshold is selected low enough to get more than $N$ key-points. The best $N$ key-points (according to the Harris corner measure) are then selected.
 
-To find multi-scale features, the scale pyramid of an image is generated and key-points are generated at each level in the pyramid.
+To find multi-scale features, the scale pyramid of an image is generated and key-points are located at each level in the pyramid.
 
 \subsection{Key-point Description}
 To ensure the descriptor's invariance to rotation, we need to determine the key-point orientation. To achieve this goal, the intensity centroid \cite{Rosin1999} is used. The intensity centroid expects the intensity of a key-point to be offset from its center. The vector from the center to the centroid is used for the key-point orientation.
@@ -35,7 +35,7 @@ where atan$2$ is the quadrant-aware version of arctan.
 An example of key-points and their orientation, found by OpenCV ORB implementation, can be seen in \figref{fig:orb_example}.
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.55\textwidth]{Figures/orb/orb_example.jpg}
+    \includegraphics[width=0.65\textwidth]{Figures/orb/orb_example.jpg}
     \caption[ORB key-points and their orientation from an image of a cat]{ORB key-points and their orientation from an image of a cat.}
     \label{fig:orb_example}
 \end{figure}

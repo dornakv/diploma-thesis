@@ -3,7 +3,7 @@ Principal Component Analysis (PCA) is a global feature extractor based on the da
 
 Let $x_t \in \mathbb{R}^n$ be a data point, where $t=1,\dots,T$ and $T$ is the number of data points. The aim of the analysis is the determination of the optimal projector, which projects $x_t$ onto $y_t \in \mathbb{R}^k$, where $k < n$. We want to find the optimal parameters $P$ of the parametric reduction mapping $\psi_P: \mathbb{R}^n \rightarrow \mathbb{R}^k$ and the parametric reconstruction mapping $\psi_P^{-1}: \mathbb{R}^k \rightarrow \mathbb{R}^n$. The optimal parameters $P^{*}$ minimize the reconstruction error, i.e.,
 \begin{equation}
-    P^{*} \coloneqq \argmin_{P \in \rho} \sum_{t=1}^T \norm{x_t - \psi_P^{-1}(\psi_P(x_t))},
+    P^{*} \coloneqq \argmin_{P} \sum_{t=1}^T \norm{x_t - \psi_P^{-1}(\psi_P(x_t))},
     \label{eq:mapping_optimization}
 \end{equation}
 where $\psi$ denotes the set of feasible parameters and $\norm{x_t - \psi_P^{-1}(\psi_P(x_t))}$ is the reconstruction error of a data-point.

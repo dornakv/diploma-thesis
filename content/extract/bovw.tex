@@ -3,7 +3,7 @@ Local feature extractors provide us with varied number of descriptors for each i
 
 Bag of Words (BoW) is a technique, which represents each sample in a dataset as a multiset of its words. In general, these words do not have to be literal words but can be any categorization of information provided by the sample.
 
-The first step of BoW is the dictionary generation. The dictionary is a set of $k \in \mathbb{N}$ categories of words called bins. Provided the dictionary, the BoW assigns each word to a bin. Finally, for each sample in the dataset, a histogram of frequencies of words belonging to each bin is calculated.
+The first step of BoW is the dictionary generation. The dictionary is a set of $k \in \mathbb{N}$ categories of words called bins. Providing the dictionary, the BoW assigns each word to a bin. Finally, for each sample in the dataset, a histogram of frequencies of words belonging to each bin is calculated.
 
 As an example, we explain the technique with text documents. With text documents, the dictionary consists of every unique word in all documents. The words of each document are assigned to a bin consisting of said words.
 
@@ -23,13 +23,13 @@ The $k$-means algorithm is an unsupervised learning technique \cite{macqueen1967
 \end{equation}
 where \(c_1, c_2, ..., c_k \) are the centroids of corresponding clusters \(S_1, S_2, ..., S_k \). The centroids are determined as means of data points belonging to each cluster.
 
-The algorithm starts by selecting $k$ random data points as the centroids. The iterative process is based on the alternation between the following two steps until a termination condition is met:
+The algorithm starts by selecting $k$ random data points as the centroids. The iterative process is based on the alternation between the following two consecutive steps until a termination condition is met:
 \begin{description}
     \item{\textbf{Assignment step:}} Each data point is assigned to the cluster, such that the Euclidean distance between the centroids of the clusters and the data point is the smallest one.
     \item{\textbf{Update step:}} For each cluster, a new centroid is computed as the mean value of data points belonging to this cluster.
 \end{description}
 
-The termination condition is satisfied, when the ratio of the samples, for which the assigned cluster changes, to the total amount of samples, is smaller than a specified threshold. The steps of the algorithm can be seen in \figref{fig:k_means_alg}.
+The termination condition is satisfied, when the ratio of the samples, for which the assigned cluster changes, to the total amount of samples, is smaller than a specified threshold. The steps of the algorithm are demonstrated in \figref{fig:k_means_alg}.
 \begin{figure}[ht]
     \centering
     \begin{subfigure}[t]{0.22\textwidth}
@@ -55,4 +55,4 @@ The termination condition is satisfied, when the ratio of the samples, for which
     \caption[Lloyd's algorithm demonstration.]{Lloyd algorithm demonstration \cite{Wikikmeans}.}
     \label{fig:k_means_alg}
 \end{figure}
-The challenge is the determination of the number of clusters $k$, and consequently the size of the visual dictionary. In our experiments, we examine different settings for $k$ to find a clustering, which best represents our data.
+The challenge is the determination of the number of clusters $k$, the size of the visual dictionary. In our experiments, we examine different settings for $k$ to find a clustering, which allows for satisfactory classification.

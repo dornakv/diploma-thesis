@@ -37,7 +37,7 @@ The properties \eqref{eq:svm_positive_data} and \eqref{eq:svm_negative_data} can
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.6\textwidth]{Figures/svm/hyperplane_svm.pdf}
+    \includegraphics[width=0.65\textwidth]{Figures/svm/hyperplane_svm.pdf}
     \caption[Example of the SVM model]{Example of the SVM model \cite{Kruzik2018}.}
     \label{fig:svm-margin}
 \end{figure}
@@ -60,7 +60,7 @@ which can be reformulated as the Quadratic Programming problem
     \label{eq:svm_hard_margin_minimization}
 \end{equation}
 
-Because the training data is nearly never linearly separable, the soft margin version of the SVM was proposed by Vladimir N. Vapnik and Corinna Cortes \cite{Cortes1995} in 1995. It exploits an additional function called the hinge loss function:
+Because the training data is not commonly separable, the soft margin version of the SVM was proposed by Vladimir N. Vapnik and Corinna Cortes \cite{Cortes1995} in 1995. It exploits an additional function called the hinge loss function:
 \begin{equation}
     \xi_i = \max(0, 1-y_i(\boldsymbol{w}^T\boldsymbol{x}_i-b)).
     \label{eq:svm_hinge_loss}
@@ -77,7 +77,7 @@ If we add the hinge loss function \eqref{eq:svm_hinge_loss} to optimization prob
     \end{cases}
     \label{eq:svm:soft_margin_minimization}
 \end{equation}
-where \( C \) is a penalty for the misclassification error. The formulation \eqref{eq:svm:soft_margin_minimization} is called the $l1$-loss $l2$-regularized SVM. The primal formulation \eqref{eq:svm:soft_margin_minimization} can be modified using the Lagrange duality with Lagrange multipliers $\boldsymbol{\alpha} = [\alpha_1, \alpha_2, ..., \alpha_n]^{\top}$, $\boldsymbol{\beta} = [\beta_1, \beta_2, ..., \beta_n]^{\top}$. Exploiting Karush-Kuhn-Tucker conditions, we obtain the dual formulation
+where \( C \geq 0 \) is a penalty for the misclassification error. The formulation \eqref{eq:svm:soft_margin_minimization} is called the $l1$-loss $l2$-regularized SVM. The primal formulation \eqref{eq:svm:soft_margin_minimization} can be modified using the Lagrange duality with Lagrange multipliers $\boldsymbol{\alpha} = [\alpha_1, \alpha_2, ..., \alpha_n]^{\top}$, and $\boldsymbol{\beta} = [\beta_1, \beta_2, ..., \beta_n]^{\top}$ corresponding to inequality constraints. Exploiting Karush-Kuhn-Tucker conditions, we obtain the dual formulation
 \begin{equation}
     \argmin_{\boldsymbol{\alpha}} \frac{1}{2} \boldsymbol{\alpha}^T\boldsymbol{Y}^T\boldsymbol{K}\boldsymbol{Y}\boldsymbol{\alpha} - \boldsymbol{\alpha}^T\boldsymbol{e}\quad \text{ s.t. } 
     \begin{cases}

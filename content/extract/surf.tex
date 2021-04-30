@@ -18,7 +18,7 @@ The Hessian matrix at scale $\sigma$ is defined as
 \end{equation}
 where $L_{xx}(x, y, \sigma)$, $L_{xy}(x, y, \sigma)$, and $L_{yy}(x, y, \sigma)$ are the second-order derivatives of the scale-space representation of the image at a point $(x, y)$.
 
-The SURF authors decided to approximate the second order derivatives of Gaussian filter with box filters (shown in \figref{fig:Gauss_box_y}). Because the property of Gaussian filter, that no new structures can appear while going to a lower resolution, has been shown not to apply in 2D case \cite{Koenderink1984}, this can be done. Box filters allow for the use of integral images, which reduces the computational complexity.
+The SURF authors decided to approximate the second order derivatives of Gaussian filter with box filters (shown in \figref{fig:Gauss_box_y}). Because the property of Gaussian filter, that no new structures can appear while going to a lower resolution, has been shown not to apply in 2D case \cite{Koenderink1984}. Box filters allow for the use of integral images, which reduces the computational complexity.
 
 \begin{figure}
     \centering
@@ -48,14 +48,14 @@ As the box filter layout remains the same, the corresponding Gaussian filter sca
 To select the key-points, non-maximum suppression in the $3\times3\times3$ neighborhood of each point is applied. Afterwards, the maxima of the determinant of the Hessian matrix are interpolated the same way as in the SIFT algorithm (using quadratic Taylor expansion).
 
 \subsection{Key-point Description}
-At first, we need to ensure the descriptor's invariance to rotation. For the key-point, we calculate the Haar-wavelet responses in the $x$ and the $y$ direction in a circular neighborhood of $6s$, where $s$ is the Gaussian filter scale at which the key-point was found. Integral images are used for speeding up the process.
+At first, we need to ensure the descriptor's invariance to rotation. For every key-point, we calculate the Haar-wavelet responses in the $x$ and the $y$ direction in a circular neighborhood of $6s$, where $s$ is the Gaussian filter scale at which the key-point was found. Integral images are used for speeding up the process.
 
 The wavelet responses are weighted with a Gaussian($\sigma = 2.5 s$) centered at the key-point. The weighted responses are represented as vectors in a space with the $x$ response being a vector along the $x$-axis, and the $y$ response being a vector along the $y$-axis. All the vectors within a sliding window of $\frac{\pi}{3}$ are summed and the longest of the vector is selected as the key-point orientation.
 
-An example of key-points and their orientation, found by OpenCV SURF implementation, can be seen in \figref{fig:surf_example}.
+An example of key-points and their orientation, found by OpenCV SURF implementation, is presented in \figref{fig:surf_example}.
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.50\textwidth]{Figures/surf/surf_example.jpg}
+    \includegraphics[width=0.60\textwidth]{Figures/surf/surf_example.jpg}
     \caption[SURF key-points and their orientation from an image of a dog]{SURF key-points and their orientation from an image of a dog.}
     \label{fig:surf_example}
 \end{figure}

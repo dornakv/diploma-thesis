@@ -19,7 +19,7 @@ The search for the optimal $\Delta^{*}$ can be written as
 \begin{equation}
     \Delta^* = \argmin_{\Delta \in \Omega_{\Delta}} \sum_{t=1}^T \text{dist}(\Pi_{yt}, \Delta\Pi_{xt}),
 \end{equation}
-where $\Omega_{\Delta}$ is a set of left stochastic matrices. The dist($\Pi_{yt}, \Delta\Pi_{xt}$) is calculated as Kullback-Leiber divergence\cite{Kullback1951}:
+where $\Omega_{\Delta}$ is a set of left stochastic matrices. The dist($\Pi_{yt}, \Delta\Pi_{xt}$) is calculated as Kullback-Leiber divergence \cite{Kullback1951}:
 \begin{equation}
     \text{dist}(\Pi_{yt}, \Delta\Pi_{xt}) = - \sum_{i=1}^{K_y} \Pi_{yt}^i \ln\frac{(\Delta\Pi_{xt})_i}{\Pi_{yt}^i} = - \sum_{i=1}^{K_y} \Pi_{yt}^i (\ln (\Delta\Pi_{xt})_i - \ln \Pi_{yt}^i).
 \end{equation}
@@ -37,7 +37,7 @@ From this, we get an optimization problem
 \end{equation}
 where
 \begin{equation}
-    \Omega_{\Delta} = \{ \Delta \in [0, 1], \forall j \in \{ 1, 2, \dots, K_x \} : \sum_{i=1}^{K_y} \Delta_{ij} = 1 \},
+    \Omega_{\Delta} = \{ \Delta \in [0, 1]^{K_y,K_x}, \forall j \in \{ 1, 2, \dots, K_x \} : \sum_{i=1}^{K_y} \Delta_{ij} = 1 \},
 \end{equation}
 which is a feasible set of left stochastic matrices. The problem can be solved analytically.
 
@@ -60,10 +60,10 @@ From \eqref{eq:bayes_first_kkt} and \eqref{eq:bayes_second_kkt}, we get the opti
     \Delta_{\hat{i}\hat{j}}^{*} = \frac{\sum_{t=1}^{T} \Pi_{yt}^{\hat{i}} \Pi_{xt}^{\hat{j}}}{\sum_{i=1}^{K_y} \sum_{t=1}^{T} \Pi_{yt}^{i} \Pi_{xt}^{\hat{j}},}.
 \end{equation}
 
-Another approach to finding the optimal $\Delta^{*}$ is optimizing the problem
+Another approach to finding the optimal $\Delta^{*}$ is optimizing the original problem
 \begin{equation}
     \Delta^* = \argmin_{\Delta \in \Omega_{\Delta}} - \sum_{t=1}^T \sum_{i=1}^{K_y} \Pi_{yt}^i \ln (\Delta\Pi_{xt})_i,
 \end{equation}
-without using the Jensen inequality. Since the feasible set $\Omega_{\Delta}$ is a closed convex set, the problem can be solved numerically using the Spectral Projected Gradient method\cite{birgin2000}.
+without using the Jensen inequality. Since the feasible set $\Omega_{\Delta}$ is a closed convex set, the problem can be solved numerically using the Spectral Projected Gradient method \cite{birgin2000}.
 
-We use both approaches (the analytical solution using Jensen inequality and the numerical solution) in our experiments.
+We compare both approaches (the analytical solution using Jensen inequality and the numerical solution) in our experiments.
