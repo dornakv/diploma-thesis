@@ -70,7 +70,7 @@ where cov($x$) is the covariance matrix of $x$ defined as
 The argument of the minimum is independent of additive constants in the objective function. Therefore, we can reformulate the optimization problem \eqref{eq:pca_optimization} (in terms of variable $Q$) as
 \begin{equation}
     \begin{split}
-        [Q^*] &= \argmin_{Q^{\top}Q=I} f(Q,b^*) = \argmin_{Q^{\top}Q=I} -\text{trace}(Q^{\top}\text{cov}(x)Q) \\&= \argmax_{Q^{\top}Q=I} \text{trace}(Q^{\top}\text{cov}(x)Q) \\&= \argmax_{\forall j:q_j^{\top}q_j=1} \sum_{j=1}^k q_j^{\top} \text{cov}(x) q_j,
+        [Q^*] &= \argmin_{Q^{\top}Q=I} f(Q,b^*) = \argmin_{Q^{\top}Q=I} -\text{trace}(Q^{\top}\text{cov}(x)Q) \\&= \argmax_{Q^{\top}Q=I} \text{trace}(Q^{\top}\text{cov}(x)Q) = \argmax_{\forall j:q_j^{\top}q_j=1} \sum_{j=1}^k q_j^{\top} \text{cov}(x) q_j,
     \end{split}
     \label{eq:pca_optimization_final}
 \end{equation}

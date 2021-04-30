@@ -49,12 +49,12 @@ To detect sub-pixel locations of extrema, the DoG is interpolated using quadrati
     D(\boldsymbol{x}) = D + \frac{\partial D^T}{\partial \boldsymbol{x}}\boldsymbol{x}+\frac{1}{2}\boldsymbol{x}^T\frac{\partial^2 D}{\partial \boldsymbol{x}^2}\boldsymbol{x},
     \label{eq:taylor_expansion}
 \end{equation}
-where \( D(x,y,\sigma) \) and the partial derivatives are evaluated at the key-point and \( \boldsymbol{x}=(x,y,\sigma) \) is the offset from the key-point. Afterwords, extremum \( \hat{\boldsymbol{x}} \) is located by setting the gradient of \( D \) to be a zero vector:
+where \( D(x,y,\sigma) \) and the partial derivatives are evaluated at the key-point and \( \boldsymbol{x}=(x,y,\sigma) \) is the offset from the key-point. Afterwords, extrema \( \hat{\boldsymbol{x}} \) is located by setting the gradient of \( D \) to be a zero vector:
 \begin{equation}
     \hat{\boldsymbol{x}} = - \frac{\partial^2 D^{-1}}{\partial \boldsymbol{x}^2}\frac{\partial D}{\partial \boldsymbol{x}}.
     \label{eq:taylor_extremum}
 \end{equation}
-If the offset \( \hat{\boldsymbol{x}} \) is larger than \( 0.5 \) in any dimension, it indicates that the extremum is closer to another point. In this case, the candidate point is changed to the new point, and interpolation is performed again.
+If the offset \( \hat{\boldsymbol{x}} \) is larger than \( 0.5 \) in any dimension, it indicates that the extrema is closer to another point. In this case, the candidate point is changed to the new point, and interpolation is performed again.
 
 The function value at the sub-pixel extrema ,$D(\hat{\boldsymbol{x}})$, is used for rejecting extrema with low contrast. In our experiments, we use the OpenCV SIFT implementation, where the default value is $\frac{0.04}{3}$ \cite{openCV}.
 
@@ -102,7 +102,7 @@ To ensure descriptor invariance to a rotation, we first determine the key-point 
 \end{equation}
 and orientation
 \begin{equation}
-    \theta(x,y) = tan^{-1}\left(\frac{L(x,y+1)-L(x,y-1)}{L(x+1,y)-L(x-1,y)}\right),
+    \theta(x,y) = \text{tan}^{-1}\left(\frac{L(x,y+1)-L(x,y-1)}{L(x+1,y)-L(x-1,y)}\right),
 \end{equation}
 of each point within a region around the key-point. From these values, an orientation histogram with $36$ bins is created. The largest peak is selected as a key-point orientation. If there are other peaks more than $80\%$ of the largest peak, new key-points are created at the same location with the other peaks as their orientation.
 
@@ -119,6 +119,6 @@ The descriptor is constructed from a window of the size $16\times16$ pixels arou
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{Figures/sift/descriptor.jpg}
-    \caption[Extracting the sift-descriptor.]{Building of the SIFT-descriptor \cite{Lowe2004}.}
+    \caption[Building of the SIFT-descriptor]{Building of the SIFT-descriptor \cite{Lowe2004}.}
     \label{fig:sift_descriptor}
 \end{figure}

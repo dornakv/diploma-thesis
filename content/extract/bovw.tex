@@ -1,7 +1,7 @@
 \section{Bag of Visual Words}
 Local feature extractors provide us with varied number of descriptors for each image. However, for classification, we require each image to be represented by a single vector. This can be achieved using a Bag of Words technique.
 
-Bag of Words (BoW) is a technique, which represents each sample in a dataset as a multiset of its words. In general, these words do not have to be literal words but can be any categorization of information provided by the sample.
+Bag of Words (BoW) is a technique, which represents each sample in a dataset as a multi-set of its words. In general, these words do not have to be literal words but can be any categorization of information provided by the sample.
 
 The first step of BoW is the dictionary generation. The dictionary is a set of $k \in \mathbb{N}$ categories of words called bins. Providing the dictionary, the BoW assigns each word to a bin. Finally, for each sample in the dataset, a histogram of frequencies of words belonging to each bin is calculated.
 

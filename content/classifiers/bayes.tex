@@ -1,8 +1,8 @@
 \section{Bayesian Model}
 This classifier is suitable for classifying data represented by a stochastic vector. The BoVW data can be easily transformed into such vector. Instead of each component of the BoVW vector representing the number of key-points in the respective category, the component in our new vector represents the probability of key-points belonging to the respective category.
 
-Let us denote the stochastic data vector $\Pi_{xt} \in \mathbb{R}^{K_x}, t=1,\dots,T$, where $T$ is the number of samples, $K_x$ is the size of BoVW, and. Let the vector $\Pi_{yt}\in \mathbb{R}^{K_y}$ be a vector of probabilities, with which $\Pi_{xt}$ belongs to each category, and $K_y$ the number of categories.
-Let $x_t \in X \coloneqq \lbrace \mathsf{x}_1, \dots \mathsf{x}_{K_x} \rbrace, t = 1,\dots,T$ be the input variables and let $y_t \in \mathsf{Y} := \lbrace \mathsf{y}_1, \dots, \mathsf{y}_{K_Y} \rbrace$ be output categorical variables. 
+Let $x_t \in X \coloneqq \lbrace \mathsf{x}_1, \dots \mathsf{x}_{K_x} \rbrace, t = 1,\dots,T$ be the input variables and let $y_t \in \mathsf{Y} := \lbrace \mathsf{y}_1, \dots, \mathsf{y}_{K_Y} \rbrace$ be output categorical variables.
+Let us denote the stochastic data vector $\Pi_{xt} \in \mathbb{R}^{K_x}, t=1,\dots,T$, where $T$ is the number of samples, $K_x$ is the size of BoVW. Let the vector $\Pi_{yt}\in \mathbb{R}^{K_y}$ be a vector of probabilities, with which $\Pi_{xt}$ belongs to each category, and $K_y$ the number of categories.
 
 Given a stochastic data vector $\Pi_x$, we can describe the transformation $\mathbb{R}^{K_x} \rightarrow \mathbb{R}^{K_y}$ using a matrix $\Delta \in \mathbb{R}^{K_y, K_x}$:
 \begin{equation}
@@ -16,7 +16,7 @@ Given a stochastic data vector $\Pi_x$, we can describe the transformation $\mat
 \end{equation}
 where $\Pi_x^n$ is the $n$-th element of $\Pi_x$, similar to $\Pi_y^n$, and the matrix $\Delta$ is a left stochastic matrix.
 
-The search for the optimal $\Delta^{*}$ can be written as
+The determination of the optimal $\Delta^{*}$ can be written as
 \begin{equation}
     \Delta^* = \argmin_{\Delta \in \Omega_{\Delta}} \sum_{t=1}^T \text{dist}(\Pi_{yt}, \Delta\Pi_{xt}),
 \end{equation}
@@ -32,7 +32,7 @@ The analytical solution for this problem does not exist. However, $-\ln()$ is a 
 \begin{equation}
     - \sum_{i=1}^{K_y} [\Pi_{yt}]_i \ln [\Delta\Pi_{xt}]_i \leq - \sum_{i=1}^{K_y} [\Pi_{yt}]_i ( \sum_{j=1}^{K_x} [\Pi_{xt}]_j \ln (\Delta_{ij}) ) = - \sum_{i=1}^{K_y} \sum_{j=1}^{K_x} [\Pi_{yt}]_i [\Pi_{xt}]_j \ln \Delta_{ij}.
 \end{equation}
-From this, we get an optimization problem
+From this estimation, we get an approximated optimization problem
 \begin{equation}
     \Delta^* = \argmin_{\Delta \in \Omega_{\Delta}} - \sum_{t=1}^T \sum_{i=1}^{K_y} \sum_{j=1}^{K_x} [\Pi_{yt}]_i [\Pi_{xt}]_j \ln \Delta_{ij},
 \end{equation}

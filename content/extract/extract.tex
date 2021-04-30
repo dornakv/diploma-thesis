@@ -1,10 +1,10 @@
-\chapter{Image Data Transformation}
+\chapter{Image Data Transformation}\label{sec:transformation}
 
 Currently, recording of visual signals in the form of photographs is common. Since the resolution, and consequently the storage requirement grows, it is not practical to process such data directly in raw format. Moreover, while processing such data, we come across the problem of \say{small data}, where the number of the feature dimension is significantly higher than the number of observations. Therefore, it might be beneficial to transform the image data into a feature space using a feature extraction technique. The feature extraction techniques can be split into two categories: local and global feature extractors \cite{lee2005}.
 
 Local feature extractors determine such points in an image, which could be found regardless of the position of the subject in the image. These points are called key-points. The area around such key-points is described using a vector called a descriptor. The descriptors are created in a way, which allow matching similar features.
 
-On the other hand, global feature extractors transform the whole image into a lower-dimensional vector attempting to retain the most important information. The remaining information in the image is considered to be a noise, which should not have any effect on the classification of the image. Therefore, it can be ignored.
+On the other hand, global feature extractors transform the whole image into a lower-dimensional vector attempting to retain the most important information. The remaining information in the image is considered to be a noise, which should not have any effect on the classification of the image. Therefore, it can be eliminated.
 
 In this thesis, we compare three local feature extractors, i.e., SIFT, SURF and ORB, and a global feature extractor, i.e., PCA. In this section, we review the details of these four feature extraction approaches.
 
